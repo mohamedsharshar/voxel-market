@@ -17,22 +17,24 @@ export default function Home() {
       <section className="hero">
         <div className="hero-city" />
         <div className="hero-bg" />
-        <div className="hero-content">
-          <div className="hero-badge">
-            <Gamepad2 size={15} />
-            Premium Game Assets
-          </div>
-          <h1>
-            Game-ready <span className="cyan">3D</span> <span className="cyan">models</span><br />
-            for your next project
-          </h1>
-          <p>
-            Discover thousands of high-quality meshes, props, and characters
-            from verified independent creators. Built for indie devs and 3D enthusiasts.
-          </p>
-          <div className="hero-buttons">
-            <Link to="/browse" className="btn-primary">Browse Catalog</Link>
-            <Link to="/creators" className="btn-secondary">Meet Creators</Link>
+        <div className="hero-inner">
+          <div className="hero-content">
+            <div className="hero-badge">
+              <Gamepad2 size={15} />
+              Premium Game Assets
+            </div>
+            <h1>
+              Game-ready <span className="cyan">3D</span> <span className="cyan">models</span><br />
+              for your next project
+            </h1>
+            <p>
+              Discover thousands of high-quality meshes, props, and characters
+              from verified independent creators. Built for indie devs and 3D enthusiasts.
+            </p>
+            <div className="hero-buttons">
+              <Link to="/browse" className="btn-primary">Browse Catalog</Link>
+              <Link to="/creators" className="btn-secondary">Meet Creators</Link>
+            </div>
           </div>
         </div>
       </section>
