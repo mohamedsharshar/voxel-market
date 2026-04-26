@@ -60,7 +60,7 @@ input, select { font-family: inherit; }
 }
 .nav-logo {
   display: flex; align-items: center; gap: 10px;
-  font-size: 16px; font-weight: 700; color: var(--white);
+  font-size: 18px; font-weight: 700; color: var(--white);
   text-decoration: none; flex-shrink: 0;
 }
 .nav-logo svg { color: var(--cyan); }
@@ -82,7 +82,7 @@ input, select { font-family: inherit; }
 .nav-search input {
   width: 100%; padding: 8px 12px 8px 36px;
   background: var(--bg-secondary); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); color: var(--text-primary);
+  border-radius: 9999px; color: var(--text-primary);
   font-size: 14px; outline: none; transition: border-color .15s;
 }
 .nav-search input::placeholder { color: var(--text-muted); }
@@ -90,7 +90,7 @@ input, select { font-family: inherit; }
 .nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .nav-cart {
   width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-  border-radius: var(--radius-sm); color: var(--text-secondary);
+  border-radius: 9999px; color: var(--text-secondary);
   transition: color .15s, background .15s;
 }
 .nav-cart:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
@@ -101,7 +101,7 @@ input, select { font-family: inherit; }
 }
 .btn-login:hover { color: var(--white); }
 .btn-signup {
-  padding: 7px 18px; border-radius: var(--radius-sm);
+  padding: 8px 20px; border-radius: 9999px;
   background: var(--cyan); color: #000;
   font-size: 14px; font-weight: 600;
   transition: background .15s, transform .1s;

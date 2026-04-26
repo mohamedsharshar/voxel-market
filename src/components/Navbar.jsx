@@ -15,7 +15,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
     <nav className="navbar">
       <div className="nav-inner">
         <Link to="/" className="nav-logo">
-          <Box size={22} />
+          <Box size={24} />
           Voxel Market
         </Link>
 
@@ -25,7 +25,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
         </div>
 
         <form className="nav-search" onSubmit={handleSearch}>
-          <Search size={15} />
+          <Search size={16} />
           <input
             type="text"
             placeholder="Search models..."
@@ -36,7 +36,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
 
         <div className="nav-actions">
           <Link to="/browse" className="nav-cart">
-            <ShoppingCart size={19} />
+            <ShoppingCart size={18} />
           </Link>
           <button className="btn-login" onClick={onLoginClick}>Log in</button>
           <button className="btn-signup" onClick={onSignupClick}>Sign up</button>
