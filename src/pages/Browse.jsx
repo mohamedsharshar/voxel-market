@@ -1,11 +1,45 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronDown, Check } from 'lucide-react';
 import ModelCard from '../components/ModelCard';
 import { MODELS } from '../data';
 
 const CATEGORIES = ['All Categories', 'Characters', 'Vehicles', 'Weapons', 'Environment', 'Creatures'];
 const SORT_OPTIONS = ['Newest First', 'Price: Low to High', 'Price: High to Low', 'Most Popular'];
+
+function CustomSelect({ value, options, onChange }) {
+  const [open, setOpen] = React.useState(false);
+  
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        className={`custom-select-trigger ${open ? 'open' : ''}`}
+        onClick={() => setOpen(!open)}
+      >
+        <span>{value}</span>
+        <ChevronDown size={14} style={{ color: 'var(--text-muted)' }} />
+      </button>
+      
+      {open && (
+        <>
+          <div style={{ position: 'fixed', inset: 0, zIndex: 40 }} onClick={() => setOpen(false)} />
+          <div className="custom-select-menu">
+            {options.map(opt => (
+              <div
+                key={opt}
+                className={`custom-select-option ${value === opt ? 'active' : ''}`}
+                onClick={() => { onChange(opt); setOpen(false); }}
+              >
+                {opt}
+                {value === opt && <Check size={14} />}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export default function Browse() {
   const [searchParams] = useSearchParams();
@@ -57,29 +91,23 @@ export default function Browse() {
           </div>
 
           {/* Category */}
-          <div className="filter-group" style={{ position: 'relative' }}>
+          <div className="filter-group">
             <div className="filter-label">Category</div>
-            <select
-              className="filter-select"
+            <CustomSelect
               value={category}
-              onChange={e => setCategory(e.target.value)}
-            >
-              {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-            </select>
-
-            {/* dropdown preview if open - just the select handles this natively */}
+              options={CATEGORIES}
+              onChange={setCategory}
+            />
           </div>
 
           {/* Sort */}
           <div className="filter-group">
             <div className="filter-label">Sort By</div>
-            <select
-              className="filter-select"
+            <CustomSelect
               value={sort}
-              onChange={e => setSort(e.target.value)}
-            >
-              {SORT_OPTIONS.map(o => <option key={o}>{o}</option>)}
-            </select>
+              options={SORT_OPTIONS}
+              onChange={setSort}
+            />
           </div>
 
           {/* Verified Toggle */}

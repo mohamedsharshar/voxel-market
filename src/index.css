@@ -223,7 +223,7 @@ input, select { font-family: inherit; }
 .model-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
   transition: border-color .2s, transform .2s, box-shadow .2s;
@@ -243,16 +243,16 @@ input, select { font-family: inherit; }
 }
 .model-card:hover .model-card-image img { transform: scale(1.04); }
 .model-card-price {
-  position: absolute; top: 10px; left: 10px;
-  padding: 4px 10px; border-radius: var(--radius-sm);
-  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  position: absolute; top: 12px; left: 12px;
+  padding: 4px 10px; border-radius: 9999px;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
   font-size: 13px; font-weight: 700; color: var(--white);
 }
 .model-card-like {
-  position: absolute; top: 10px; right: 10px;
+  position: absolute; top: 12px; right: 12px;
   display: flex; align-items: center; gap: 5px;
-  padding: 4px 10px; border-radius: var(--radius-sm);
-  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  padding: 4px 6px; border-radius: 9999px;
+  background: transparent;
   font-size: 13px; font-weight: 600; color: var(--text-primary);
   cursor: pointer; transition: color .15s;
 }
@@ -301,17 +301,29 @@ input, select { font-family: inherit; }
   position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
   color: var(--text-muted); pointer-events: none; width: 15px; height: 15px;
 }
-.filter-select {
+.custom-select-trigger {
   width: 100%; padding: 9px 12px;
   background: var(--bg-input); border: 1px solid var(--border);
   border-radius: var(--radius-sm); color: var(--text-primary);
   font-size: 14px; outline: none; cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b9099' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 12px center;
+  display: flex; align-items: center; justify-content: space-between;
   transition: border-color .15s;
 }
-.filter-select:focus { border-color: var(--cyan); }
+.custom-select-trigger:focus, .custom-select-trigger.open { border-color: var(--cyan); }
+.custom-select-menu {
+  position: absolute; top: 100%; left: 0; right: 0;
+  margin-top: 4px; z-index: 50;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.custom-select-option {
+  padding: 8px 12px; font-size: 14px; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+}
+.custom-select-option:hover { background: var(--bg-card-hover); }
+.custom-select-option.active { background: var(--cyan); color: #000; font-weight: 500; }
+.custom-select-option svg { width: 14px; height: 14px; color: inherit; }
 .filter-toggle {
   display: flex; align-items: center; justify-content: space-between;
 }
