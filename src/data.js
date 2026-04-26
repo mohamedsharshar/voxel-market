@@ -1,0 +1,97 @@
+export const MODELS = [
+  {
+    id: 1, name: 'Embergaze Dragon', price: '$38.00', likes: 1, views: '11.2k',
+    creator: 'Sofia Beasts', verified: true, category: 'Creatures',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=70',
+    featured: true,
+  },
+  {
+    id: 2, name: 'Fortress Keep Modular Kit', price: '$45.00', likes: 2, views: '14.2k',
+    creator: 'Omar Builds', verified: true, category: 'Environment',
+    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=70',
+    featured: true,
+  },
+  {
+    id: 3, name: 'Cyan Strike Fighter', price: '$32.00', likes: 1, views: '9.8k',
+    creator: 'Kenji Makes', verified: true, category: 'Vehicles',
+    image: 'https://images.unsplash.com/photo-1581822261290-991b38693d1b?w=400&q=70',
+    featured: true,
+  },
+  {
+    id: 4, name: 'Runebound Greatsword', price: '$12.00', likes: 3, views: '2.4k',
+    creator: 'Lina Forge', verified: true, category: 'Weapons',
+    image: 'https://images.unsplash.com/photo-1542652735873-fb2825bac6e2?w=400&q=70',
+    featured: true,
+  },
+  {
+    id: 5, name: 'Razor Sports Car', price: '$26.00', likes: 3, views: '7.1k',
+    creator: 'Kenji Makes', verified: true, category: 'Vehicles',
+    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=70',
+    featured: true,
+  },
+  {
+    id: 6, name: 'Lowpoly Knight Hero', price: '$24.00', likes: 1, views: '4.2k',
+    creator: 'Aria Voxel', verified: true, category: 'Characters',
+    image: 'https://images.unsplash.com/photo-1616400619175-5beda3a17896?w=400&q=70',
+    featured: false,
+  },
+  {
+    id: 7, name: 'Companion Mech B-9', price: '$28.00', likes: 2, views: '5.9k',
+    creator: 'Ravi Craft', verified: false, category: 'Characters',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=70',
+    featured: false,
+  },
+  {
+    id: 8, name: 'Glowleaf Tree', price: '$8.00', likes: 3, views: '3.3k',
+    creator: 'Omar Builds', verified: true, category: 'Environment',
+    image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=70',
+    featured: false,
+  },
+  {
+    id: 9, name: 'Plasma Blaster X', price: '$9.00', likes: 1, views: '1.8k',
+    creator: 'Lina Forge', verified: true, category: 'Weapons',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=70',
+    featured: false,
+  },
+];
+
+export const CREATORS = [
+  {
+    id: 1, name: 'Kenji Makes', handle: '@kenjimakes', initial: 'K',
+    bio: 'Sci-fi vehicles and hard-surface props for indie games.',
+    models: 2, sales: 443, verified: true,
+  },
+  {
+    id: 2, name: 'Sofia Beasts', handle: '@sofiabeasts', initial: 'S',
+    bio: 'Stylized creatures and friendly monsters.',
+    models: 1, sales: 421, verified: true,
+  },
+  {
+    id: 3, name: 'Omar Builds', handle: '@omarbuilds', initial: 'O',
+    bio: 'Architectural and environment kits for tabletop digital scenes.',
+    models: 2, sales: 375, verified: true,
+  },
+  {
+    id: 4, name: 'Lina Forge', handle: '@linaforge', initial: 'L',
+    bio: 'Hand-painted weapons and fantasy gear.',
+    models: 2, sales: 271, verified: true,
+  },
+  {
+    id: 5, name: 'Aria Voxel', handle: '@ariavoxel', initial: 'A',
+    bio: 'Stylized character artist with a love for low-poly heroes.',
+    models: 2, sales: 238, verified: true,
+  },
+  {
+    id: 6, name: 'Ravi Craft', handle: '@ravicraft', initial: 'R',
+    bio: 'Indie game-ready props with a cozy aesthetic.',
+    models: 1, sales: 52, verified: false,
+  },
+];
+
+export const CATEGORIES = [
+  { name: 'Characters', count: 2 },
+  { name: 'Vehicles', count: 2 },
+  { name: 'Weapons', count: 2 },
+  { name: 'Environment', count: 3 },
+  { name: 'Creatures', count: 1 },
+];
