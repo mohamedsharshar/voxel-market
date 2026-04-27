@@ -1,9 +1,10 @@
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Heart, ShoppingCart, BadgeCheck, Eye, Download, Share2, ChevronLeft, Star } from 'lucide-react';
+import { Heart, ShoppingCart, BadgeCheck, Eye, Download, Share2, ChevronLeft, Star, Box } from 'lucide-react';
 import { MODELS } from '../data';
 import { useApp } from '../context/AppContext';
 import ModelCard from '../components/ModelCard';
+import Model3DViewer from '../components/Model3DViewer';
 
 export default function ModelDetail() {
   const { id } = useParams();
@@ -15,6 +16,7 @@ export default function ModelDetail() {
   const [likes, setLikes] = React.useState(model?.likes || 0);
   const [selectedImage, setSelectedImage] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [viewMode, setViewMode] = React.useState('image'); // 'image' or '3d'
 
   if (!model) {
     return (
@@ -62,31 +64,60 @@ export default function ModelDetail() {
       </button>
 
       <div className="model-detail-layout">
-        {/* LEFT: Images */}
+        {/* LEFT: Images & 3D Viewer */}
         <div className="model-detail-images">
-          <div className="model-main-image">
-            <img src={images[selectedImage]} alt={model.name} />
-            <div className="model-image-actions">
-              <button className="image-action-btn" onClick={toggleLike}>
-                <Heart size={20} fill={liked ? '#f43f5e' : 'none'} 
-                  style={{ color: liked ? '#f43f5e' : 'white' }} />
-              </button>
-              <button className="image-action-btn" onClick={handleShare}>
-                <Share2 size={20} />
-              </button>
-            </div>
+          {/* View Mode Toggle */}
+          <div className="view-mode-toggle">
+            <button 
+              className={`view-mode-btn ${viewMode === 'image' ? 'active' : ''}`}
+              onClick={() => setViewMode('image')}
+            >
+              <Eye size={16} />
+              Images
+            </button>
+            <button 
+              className={`view-mode-btn ${viewMode === '3d' ? 'active' : ''}`}
+              onClick={() => setViewMode('3d')}
+            >
+              <Box size={16} />
+              3D View
+            </button>
           </div>
-          <div className="model-thumbnails">
-            {images.map((img, idx) => (
-              <div
-                key={idx}
-                className={`model-thumbnail ${selectedImage === idx ? 'active' : ''}`}
-                onClick={() => setSelectedImage(idx)}
-              >
-                <img src={img} alt={`View ${idx + 1}`} />
+
+          {viewMode === 'image' ? (
+            <>
+              <div className="model-main-image">
+                <img src={images[selectedImage]} alt={model.name} />
+                <div className="model-image-actions">
+                  <button className="image-action-btn" onClick={toggleLike}>
+                    <Heart size={20} fill={liked ? '#f43f5e' : 'none'} 
+                      style={{ color: liked ? '#f43f5e' : 'white' }} />
+                  </button>
+                  <button className="image-action-btn" onClick={handleShare}>
+                    <Share2 size={20} />
+                  </button>
+                </div>
               </div>
-            ))}
-          </div>
+              <div className="model-thumbnails">
+                {images.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className={`model-thumbnail ${selectedImage === idx ? 'active' : ''}`}
+                    onClick={() => setSelectedImage(idx)}
+                  >
+                    <img src={img} alt={`View ${idx + 1}`} />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="model-3d-viewer-wrapper">
+              <Model3DViewer 
+                modelUrl={model.modelUrl} 
+                modelName={model.name}
+              />
+            </div>
+          )}
         </div>
 
         {/* RIGHT: Details */}
@@ -149,12 +180,7 @@ export default function ModelDetail() {
 
           <div className="model-detail-description">
             <h3>Description</h3>
-            <p>
-              High-quality {model.category.toLowerCase()} asset perfect for game development, 
-              animation, and 3D projects. This model features clean topology, optimized geometry, 
-              and professional texturing. Ready to use in Unity, Unreal Engine, Blender, and other 
-              major 3D software.
-            </p>
+            <p>{model.description}</p>
           </div>
 
           <div className="model-detail-specs">
@@ -162,27 +188,27 @@ export default function ModelDetail() {
             <div className="specs-grid">
               <div className="spec-item">
                 <span className="spec-label">Polygons</span>
-                <span className="spec-value">12,450</span>
+                <span className="spec-value">{model.polygons.toLocaleString()}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Vertices</span>
-                <span className="spec-value">8,320</span>
+                <span className="spec-value">{model.vertices.toLocaleString()}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Textures</span>
-                <span className="spec-value">4K PBR</span>
+                <span className="spec-value">{model.textures}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Format</span>
-                <span className="spec-value">.FBX, .OBJ</span>
+                <span className="spec-value">{model.formats}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Rigged</span>
-                <span className="spec-value">Yes</span>
+                <span className="spec-value">{model.rigged ? 'Yes' : 'No'}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Animated</span>
-                <span className="spec-value">No</span>
+                <span className="spec-value">{model.animated ? 'Yes' : 'No'}</span>
               </div>
             </div>
           </div>
