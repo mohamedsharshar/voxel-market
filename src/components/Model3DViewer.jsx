@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
+import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
 import { RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
 function Model({ url, wireframe, metalness, roughness }) {
@@ -9,12 +9,19 @@ function Model({ url, wireframe, metalness, roughness }) {
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
-        if (child.material) {
-          child.material.wireframe = wireframe;
-          child.material.metalness = metalness;
-          child.material.roughness = roughness;
-          child.material.needsUpdate = true;
-        }
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        materials.forEach(mat => {
+          mat.wireframe = wireframe;
+          if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
+            mat.metalness = metalness;
+            mat.roughness = roughness;
+            // Clear maps so the sliders take full effect instead of being multiplied by the texture
+            mat.metalnessMap = null;
+            mat.roughnessMap = null;
+            mat.envMapIntensity = 1;
+          }
+          mat.needsUpdate = true;
+        });
       }
     });
   }, [scene, wireframe, metalness, roughness]);
@@ -82,6 +89,8 @@ export default function Model3DViewer({ modelUrl, modelName }) {
             <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
             <directionalLight position={[-10, -10, -5]} intensity={0.3} />
             <pointLight position={[0, 5, 0]} intensity={0.5} />
+            
+            <Environment preset="city" />
             
             <Model url={modelUrl} wireframe={wireframe} metalness={metalness} roughness={roughness} />
             
