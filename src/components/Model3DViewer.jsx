@@ -4,27 +4,22 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import { RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
 function Model({ url, wireframe, metalness, roughness }) {
-  try {
-    const { scene } = useGLTF(url);
-    
-    useEffect(() => {
-      scene.traverse((child) => {
-        if (child.isMesh) {
-          if (child.material) {
-            child.material.wireframe = wireframe;
-            child.material.metalness = metalness;
-            child.material.roughness = roughness;
-            child.material.needsUpdate = true;
-          }
+  const { scene } = useGLTF(url);
+  
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        if (child.material) {
+          child.material.wireframe = wireframe;
+          child.material.metalness = metalness;
+          child.material.roughness = roughness;
+          child.material.needsUpdate = true;
         }
-      });
-    }, [scene, wireframe, metalness, roughness]);
+      }
+    });
+  }, [scene, wireframe, metalness, roughness]);
 
-    return <primitive object={scene} scale={1.5} />;
-  } catch (error) {
-    console.error('Error loading model:', error);
-    return null;
-  }
+  return <primitive object={scene} scale={1.5} />;
 }
 
 function LoadingBox() {
@@ -135,14 +130,14 @@ export default function Model3DViewer({ modelUrl, modelName }) {
               </div>
               <input type="range" min="0" max="1" step="0.01" value={roughness} onChange={e => setRoughness(parseFloat(e.target.value))} className="cyan-slider" />
             </div>
+            <button 
+              className="viewer-control-btn fullscreen-btn" 
+              onClick={toggleFullscreen}
+              title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+            >
+              {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
           </div>
-          <button 
-            className="viewer-control-btn fullscreen-btn" 
-            onClick={toggleFullscreen}
-            title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-          >
-            {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-          </button>
         </div>
       </div>
 

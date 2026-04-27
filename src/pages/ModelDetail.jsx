@@ -14,9 +14,7 @@ export default function ModelDetail() {
   const model = MODELS.find(m => m.id === parseInt(id));
   const [liked, setLiked] = React.useState(false);
   const [likes, setLikes] = React.useState(model?.likes || 0);
-  const [selectedImage, setSelectedImage] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
-  const [viewMode, setViewMode] = React.useState('image'); // 'image' or '3d'
 
   if (!model) {
     return (
@@ -66,58 +64,17 @@ export default function ModelDetail() {
       <div className="model-detail-layout">
         {/* LEFT: Images & 3D Viewer */}
         <div className="model-detail-images">
-          {/* View Mode Toggle */}
-          <div className="view-mode-toggle">
-            <button 
-              className={`view-mode-btn ${viewMode === 'image' ? 'active' : ''}`}
-              onClick={() => setViewMode('image')}
-            >
-              <Eye size={16} />
-              Images
-            </button>
-            <button 
-              className={`view-mode-btn ${viewMode === '3d' ? 'active' : ''}`}
-              onClick={() => setViewMode('3d')}
-            >
-              <Box size={16} />
-              3D View
-            </button>
+          <div className="model-3d-viewer-wrapper">
+            <Model3DViewer 
+              modelUrl={model.modelUrl} 
+              modelName={model.name}
+            />
           </div>
 
-          {viewMode === 'image' ? (
-            <>
-              <div className="model-main-image">
-                <img src={images[selectedImage]} alt={model.name} />
-                <div className="model-image-actions">
-                  <button className="image-action-btn" onClick={toggleLike}>
-                    <Heart size={20} fill={liked ? '#f43f5e' : 'none'} 
-                      style={{ color: liked ? '#f43f5e' : 'white' }} />
-                  </button>
-                  <button className="image-action-btn" onClick={handleShare}>
-                    <Share2 size={20} />
-                  </button>
-                </div>
-              </div>
-              <div className="model-thumbnails">
-                {images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className={`model-thumbnail ${selectedImage === idx ? 'active' : ''}`}
-                    onClick={() => setSelectedImage(idx)}
-                  >
-                    <img src={img} alt={`View ${idx + 1}`} />
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="model-3d-viewer-wrapper">
-              <Model3DViewer 
-                modelUrl={model.modelUrl} 
-                modelName={model.name}
-              />
-            </div>
-          )}
+          <div className="model-detail-description" style={{ marginTop: '32px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: 'var(--white)' }}>Description</h3>
+            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{model.description}</p>
+          </div>
         </div>
 
         {/* RIGHT: Details */}
@@ -178,10 +135,7 @@ export default function ModelDetail() {
             </button>
           </div>
 
-          <div className="model-detail-description">
-            <h3>Description</h3>
-            <p>{model.description}</p>
-          </div>
+
 
           <div className="model-detail-specs">
             <h3>Specifications</h3>
