@@ -1,16 +1,22 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BadgeCheck, Box, DollarSign, MapPin, Link as LinkIcon, Calendar, ChevronLeft } from 'lucide-react';
+import {
+  BadgeCheck,
+  Box,
+  DollarSign,
+  MapPin,
+  Link as LinkIcon,
+  Calendar,
+  ChevronLeft,
+} from 'lucide-react';
 import { CREATORS, MODELS } from '../data';
 import ModelCard from '../components/ModelCard';
 
 export default function CreatorProfile() {
   const { name } = useParams();
   const navigate = useNavigate();
-  
-  const creator = CREATORS.find(c => 
-    c.name.toLowerCase().replace(/\s+/g, '-') === name
-  );
+
+  const creator = CREATORS.find((c) => c.name.toLowerCase().replace(/\s+/g, '-') === name);
 
   if (!creator) {
     return (
@@ -23,7 +29,7 @@ export default function CreatorProfile() {
     );
   }
 
-  const creatorModels = MODELS.filter(m => m.creator === creator.name);
+  const creatorModels = MODELS.filter((m) => m.creator === creator.name);
 
   return (
     <div className="page">
@@ -41,7 +47,7 @@ export default function CreatorProfile() {
             </span>
           )}
         </div>
-        
+
         <div className="creator-profile-info">
           <h1 className="creator-profile-name">
             {creator.name}
@@ -49,7 +55,7 @@ export default function CreatorProfile() {
           </h1>
           <div className="creator-profile-handle">{creator.handle}</div>
           <p className="creator-profile-bio">{creator.bio}</p>
-          
+
           <div className="creator-profile-meta">
             <span className="meta-item">
               <Calendar size={14} />
@@ -61,7 +67,9 @@ export default function CreatorProfile() {
             </span>
             <span className="meta-item">
               <LinkIcon size={14} />
-              <a href="#" onClick={(e) => e.preventDefault()}>portfolio.com</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>
+                portfolio.com
+              </a>
             </span>
           </div>
 
@@ -97,7 +105,9 @@ export default function CreatorProfile() {
         <h2 className="section-title">Published Models ({creatorModels.length})</h2>
         {creatorModels.length > 0 ? (
           <div className="models-grid models-grid-4">
-            {creatorModels.map(m => <ModelCard key={m.id} model={m} />)}
+            {creatorModels.map((m) => (
+              <ModelCard key={m.id} model={m} />
+            ))}
           </div>
         ) : (
           <div style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '60px 0' }}>

@@ -4,14 +4,23 @@ import { BadgeCheck, Box, DollarSign } from 'lucide-react';
 
 export default function CreatorCard({ creator }) {
   const navigate = useNavigate();
-  
+
   const handleClick = () => {
     const slug = creator.name.toLowerCase().replace(/\s+/g, '-');
     navigate(`/creator/${slug}`);
   };
 
   return (
-    <div className="creator-card" role="link" tabIndex={0} onClick={handleClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }} aria-label={`Open creator ${creator.name} profile`}>
+    <div
+      className="creator-card"
+      role="link"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleClick();
+      }}
+      aria-label={`Open creator ${creator.name} profile`}
+    >
       <div className="creator-avatar">
         {creator.initial}
         {creator.verified && (
@@ -24,8 +33,12 @@ export default function CreatorCard({ creator }) {
       <div className="creator-handle">{creator.handle}</div>
       <div className="creator-bio">{creator.bio}</div>
       <div className="creator-stats">
-        <span className="creator-stat"><Box size={13} /> {creator.models}</span>
-        <span className="creator-stat"><DollarSign size={13} /> {creator.sales} sales</span>
+        <span className="creator-stat">
+          <Box size={13} /> {creator.models}
+        </span>
+        <span className="creator-stat">
+          <DollarSign size={13} /> {creator.sales} sales
+        </span>
       </div>
     </div>
   );

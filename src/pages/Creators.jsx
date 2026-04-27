@@ -7,7 +7,7 @@ export default function Creators() {
   const [search, setSearch] = React.useState('');
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
-  const filtered = CREATORS.filter(c => {
+  const filtered = CREATORS.filter((c) => {
     const q = search.toLowerCase();
     const match = !q || c.name.toLowerCase().includes(q) || c.handle.toLowerCase().includes(q);
     return match && (!verifiedOnly || c.verified);
@@ -17,7 +17,8 @@ export default function Creators() {
     <div className="page">
       <h1 className="browse-page-title">Creators Directory</h1>
       <p className="browse-page-sub" style={{ marginBottom: 32, maxWidth: 520 }}>
-        Discover talented 3D artists, game developers, and technical directors publishing their work on Voxel Market.
+        Discover talented 3D artists, game developers, and technical directors publishing their work
+        on Voxel Market.
       </p>
 
       {/* Search + Verified toggle */}
@@ -27,24 +28,28 @@ export default function Creators() {
           <input
             placeholder="Search creators by name or handle..."
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
-          onClick={() => setVerifiedOnly(v => !v)}
+          onClick={() => setVerifiedOnly((v) => !v)}
         >
           <div className={`toggle-switch${verifiedOnly ? ' on' : ''}`} style={{ flexShrink: 0 }}>
             <div className="toggle-knob" />
           </div>
-          <span style={{ fontSize: 14, color: verifiedOnly ? 'var(--cyan)' : 'var(--text-secondary)' }}>
+          <span
+            style={{ fontSize: 14, color: verifiedOnly ? 'var(--cyan)' : 'var(--text-secondary)' }}
+          >
             Show Verified Only
           </span>
         </div>
       </div>
 
       <div className="creators-grid">
-        {filtered.map(c => <CreatorCard key={c.id} creator={c} />)}
+        {filtered.map((c) => (
+          <CreatorCard key={c.id} creator={c} />
+        ))}
       </div>
 
       {filtered.length === 0 && (

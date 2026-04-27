@@ -39,19 +39,22 @@ export default function Cart() {
 
   return (
     <div className="page">
-        <div className="cart-header">
+      <div className="cart-header">
         <h1>Shopping Cart</h1>
-        <button className="btn-clear-cart" onClick={() => {
-          if (cart.length === 0) return;
-          const ok = window.confirm('Clear cart? This will remove all items.');
-          if (!ok) return;
-          setGlobalLoading(true);
-          setTimeout(() => {
-            clearCart();
-            setGlobalLoading(false);
-            showToast('Cart cleared', 'info');
-          }, 400);
-        }}>
+        <button
+          className="btn-clear-cart"
+          onClick={() => {
+            if (cart.length === 0) return;
+            const ok = window.confirm('Clear cart? This will remove all items.');
+            if (!ok) return;
+            setGlobalLoading(true);
+            setTimeout(() => {
+              clearCart();
+              setGlobalLoading(false);
+              showToast('Cart cleared', 'info');
+            }, 400);
+          }}
+        >
           <Trash2 size={16} />
           Clear Cart
         </button>
@@ -59,15 +62,12 @@ export default function Cart() {
 
       <div className="cart-layout">
         <div className="cart-items">
-          {cart.map(item => (
+          {cart.map((item) => (
             <div key={item.id} className="cart-item">
               <img src={item.image} alt={item.name} className="cart-item-image" />
-              
+
               <div className="cart-item-details">
-                <Link 
-                  to={`/model/${item.id}`}
-                  className="cart-item-name"
-                >
+                <Link to={`/model/${item.id}`} className="cart-item-name">
                   {item.name}
                 </Link>
                 <div className="cart-item-creator">
@@ -79,7 +79,7 @@ export default function Cart() {
 
               <div className="cart-item-price">{item.price}</div>
 
-              <button 
+              <button
                 className="cart-item-remove"
                 onClick={() => removeFromCart(item.id)}
                 aria-label={`Remove ${item.name} from cart`}
@@ -92,12 +92,12 @@ export default function Cart() {
 
         <div className="cart-summary">
           <h3>Order Summary</h3>
-          
+
           <div className="summary-row">
             <span>Subtotal ({cart.length} items)</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
-          
+
           <div className="summary-row">
             <span>Tax (10%)</span>
             <span>${tax.toFixed(2)}</span>

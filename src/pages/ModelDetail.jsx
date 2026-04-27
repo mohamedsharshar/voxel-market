@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Heart, ShoppingCart, BadgeCheck, Eye, Download, Share2, ChevronLeft, Star, Box } from 'lucide-react';
+import { Heart, ShoppingCart, BadgeCheck, Eye, Download, ChevronLeft } from 'lucide-react';
 import { MODELS } from '../data';
 import { useApp } from '../context/AppContext';
 import ModelCard from '../components/ModelCard';
@@ -9,11 +9,9 @@ import Model3DViewer from '../components/Model3DViewer';
 export default function ModelDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, cart, showToast, setGlobalLoading } = useApp();
-  
-  const model = MODELS.find(m => m.id === parseInt(id));
-  const [liked, setLiked] = React.useState(false);
-  const [likes, setLikes] = React.useState(model?.likes || 0);
+  const { addToCart, cart, setGlobalLoading } = useApp();
+
+  const model = MODELS.find((m) => m.id === parseInt(id));
   const [loading, setLoading] = React.useState(false);
 
   if (!model) {
@@ -27,17 +25,9 @@ export default function ModelDetail() {
     );
   }
 
-  const relatedModels = MODELS.filter(m => 
-    m.category === model.category && m.id !== model.id
+  const relatedModels = MODELS.filter(
+    (m) => m.category === model.category && m.id !== model.id
   ).slice(0, 4);
-
-  const images = [model.image, model.image, model.image]; // Mock multiple images
-
-  const toggleLike = () => {
-    setLiked(!liked);
-    setLikes(liked ? likes - 1 : likes + 1);
-    showToast(liked ? 'Removed from favorites' : 'Added to favorites', 'success');
-  };
 
   const handleAddToCart = () => {
     setLoading(true);
@@ -49,12 +39,7 @@ export default function ModelDetail() {
     }, 500);
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    showToast('Link copied to clipboard!', 'success');
-  };
-
-  const inCart = cart.some(item => item.id === model.id);
+  const inCart = cart.some((item) => item.id === model.id);
 
   return (
     <div className="page">
@@ -67,15 +52,23 @@ export default function ModelDetail() {
         {/* LEFT: Images & 3D Viewer */}
         <div className="model-detail-images">
           <div className="model-3d-viewer-wrapper">
-            <Model3DViewer 
-              modelUrl={model.modelUrl} 
-              modelName={model.name}
-            />
+            <Model3DViewer modelUrl={model.modelUrl} modelName={model.name} />
           </div>
 
           <div className="model-detail-description" style={{ marginTop: '32px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: 'var(--white)' }}>Description</h3>
-            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{model.description}</p>
+            <h3
+              style={{
+                fontSize: '18px',
+                fontWeight: '700',
+                marginBottom: '16px',
+                color: 'var(--white)',
+              }}
+            >
+              Description
+            </h3>
+            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+              {model.description}
+            </p>
           </div>
         </div>
 
@@ -83,23 +76,27 @@ export default function ModelDetail() {
         <div className="model-detail-info">
           <div className="model-detail-category">{model.category}</div>
           <h1 className="model-detail-title">{model.name}</h1>
-          
-          <Link to={`/creator/${model.creator.replace(/\s+/g, '-').toLowerCase()}`} 
-            className="model-detail-creator">
+
+          <Link
+            to={`/creator/${model.creator.replace(/\s+/g, '-').toLowerCase()}`}
+            className="model-detail-creator"
+          >
             <div className="creator-avatar-small">{model.creator[0]}</div>
             <div>
               <div className="creator-name-small">
                 {model.creator}
                 {model.verified && <BadgeCheck size={14} />}
               </div>
-              <div className="creator-handle-small">@{model.creator.toLowerCase().replace(/\s+/g, '')}</div>
+              <div className="creator-handle-small">
+                @{model.creator.toLowerCase().replace(/\s+/g, '')}
+              </div>
             </div>
           </Link>
 
           <div className="model-detail-stats">
             <div className="stat-item">
               <Heart size={16} />
-              <span>{likes} likes</span>
+              <span>{model.likes} likes</span>
             </div>
             <div className="stat-item">
               <Eye size={16} />
@@ -116,7 +113,7 @@ export default function ModelDetail() {
               <div className="price-label">Price</div>
               <div className="model-detail-price">{model.price}</div>
             </div>
-            <button 
+            <button
               className={`btn-add-to-cart ${loading ? 'loading' : ''} ${inCart ? 'in-cart' : ''}`}
               onClick={handleAddToCart}
               disabled={loading || inCart}
@@ -136,8 +133,6 @@ export default function ModelDetail() {
               )}
             </button>
           </div>
-
-
 
           <div className="model-detail-specs">
             <h3>Specifications</h3>
@@ -184,7 +179,9 @@ export default function ModelDetail() {
         <div className="related-section">
           <h2 className="section-title">More from this category</h2>
           <div className="models-grid models-grid-4">
-            {relatedModels.map(m => <ModelCard key={m.id} model={m} />)}
+            {relatedModels.map((m) => (
+              <ModelCard key={m.id} model={m} />
+            ))}
           </div>
         </div>
       )}

@@ -7,7 +7,14 @@ export default function GlobalLoader() {
   if (!globalLoading) return null;
 
   return (
-    <div className="global-loader" role="progressbar" aria-label="Loading" aria-valuemin={0} aria-valuemax={100} aria-valuenow={50}>
+    <div
+      className="global-loader"
+      role="progressbar"
+      aria-label="Loading"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={50}
+    >
       <div className="global-loader-bar" />
     </div>
   );

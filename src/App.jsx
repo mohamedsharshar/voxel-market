@@ -19,34 +19,28 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <a href="#main-content" className="skip-link">Skip to content</a>
-        <Navbar
-          onLoginClick={() => setModal('login')}
-          onSignupClick={() => setModal('signup')}
-        />
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        <Navbar onLoginClick={() => setModal('login')} onSignupClick={() => setModal('signup')} />
         <GlobalLoader />
 
         <main id="main-content" tabIndex={-1}>
           <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/creators" element={<Creators />} />
-          <Route path="/model/:id" element={<ModelDetail />} />
-          <Route path="/creator/:name" element={<CreatorProfile />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="*" element={<Home />} />
-
+            <Route path="/" element={<Home />} />
+            <Route path="/browse" element={<Browse />} />
+            <Route path="/creators" element={<Creators />} />
+            <Route path="/model/:id" element={<ModelDetail />} />
+            <Route path="/creator/:name" element={<CreatorProfile />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </main>
 
         <Footer />
 
         {modal && (
-          <AuthModal
-            mode={modal}
-            onClose={() => setModal(null)}
-            onSwitch={(m) => setModal(m)}
-          />
+          <AuthModal mode={modal} onClose={() => setModal(null)} onSwitch={(m) => setModal(m)} />
         )}
 
         <Toast />

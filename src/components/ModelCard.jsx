@@ -10,12 +10,12 @@ export default function ModelCard({ model, nameWhite = false }) {
   const [likes, setLikes] = React.useState(model.likes);
   const [showQuickAdd, setShowQuickAdd] = React.useState(false);
 
-  const inCart = cart.some(item => item.id === model.id);
+  const inCart = cart.some((item) => item.id === model.id);
 
   const toggleLike = (e) => {
     e.stopPropagation();
-    setLiked(l => !l);
-    setLikes(l => liked ? l - 1 : l + 1);
+    setLiked((l) => !l);
+    setLikes((l) => (liked ? l - 1 : l + 1));
   };
 
   const handleQuickAdd = (e) => {
@@ -24,12 +24,14 @@ export default function ModelCard({ model, nameWhite = false }) {
   };
 
   return (
-    <div 
+    <div
       className="model-card"
       role="button"
       tabIndex={0}
       onClick={() => navigate(`/model/${model.id}`)}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/model/${model.id}`); }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') navigate(`/model/${model.id}`);
+      }}
       onMouseEnter={() => setShowQuickAdd(true)}
       onMouseLeave={() => setShowQuickAdd(false)}
     >
@@ -45,7 +47,11 @@ export default function ModelCard({ model, nameWhite = false }) {
           {likes}
         </button>
         {showQuickAdd && !inCart && (
-          <button className="model-card-quick-add" onClick={handleQuickAdd} aria-label={`Add ${model.name} to cart`}>
+          <button
+            className="model-card-quick-add"
+            onClick={handleQuickAdd}
+            aria-label={`Add ${model.name} to cart`}
+          >
             <ShoppingCart size={16} />
             Quick Add
           </button>

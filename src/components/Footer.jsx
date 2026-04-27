@@ -12,8 +12,8 @@ export default function Footer() {
             Voxel Market
           </div>
           <p className="footer-desc">
-            A curated marketplace for game-ready 3D meshes, props, and characters.
-            Built for independent creators and indie devs.
+            A curated marketplace for game-ready 3D meshes, props, and characters. Built for
+            independent creators and indie devs.
           </p>
         </div>
         <div>

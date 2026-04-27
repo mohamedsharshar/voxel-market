@@ -10,7 +10,7 @@ export function AppProvider({ children }) {
   const [globalLoading, setGlobalLoading] = React.useState(false);
 
   const addToCart = (model) => {
-    const exists = cart.find(item => item.id === model.id);
+    const exists = cart.find((item) => item.id === model.id);
     if (exists) {
       showToast('Already in cart!', 'info');
       return;
@@ -20,12 +20,17 @@ export function AppProvider({ children }) {
   };
 
   const removeFromCart = (modelId) => {
-    const removed = cart.find(item => item.id === modelId);
-    setCart(cart.filter(item => item.id !== modelId));
+    const removed = cart.find((item) => item.id === modelId);
+    setCart(cart.filter((item) => item.id !== modelId));
     if (removed) {
-      showToast({ message: 'Removed from cart', type: 'info', actionLabel: 'Undo', onAction: () => {
-        setCart(prev => [removed, ...prev]);
-      }});
+      showToast({
+        message: 'Removed from cart',
+        type: 'info',
+        actionLabel: 'Undo',
+        onAction: () => {
+          setCart((prev) => [removed, ...prev]);
+        },
+      });
     } else {
       showToast('Removed from cart', 'info');
     }
@@ -35,12 +40,29 @@ export function AppProvider({ children }) {
     setCart([]);
   };
 
-  const showToast = (messageOrObj, type = 'info', actionLabel = null, onAction = null, duration = 3000) => {
-    if (!messageOrObj) { setToast(null); return; }
+  const showToast = (
+    messageOrObj,
+    type = 'info',
+    actionLabel = null,
+    onAction = null,
+    duration = 3000
+  ) => {
+    if (!messageOrObj) {
+      setToast(null);
+      return;
+    }
     const id = Date.now();
-    const toastObj = typeof messageOrObj === 'string'
-      ? { id, message: messageOrObj, type, actionLabel, onAction, duration }
-      : { id, message: messageOrObj.message, type: messageOrObj.type || 'info', actionLabel: messageOrObj.actionLabel, onAction: messageOrObj.onAction, duration: messageOrObj.duration || duration };
+    const toastObj =
+      typeof messageOrObj === 'string'
+        ? { id, message: messageOrObj, type, actionLabel, onAction, duration }
+        : {
+            id,
+            message: messageOrObj.message,
+            type: messageOrObj.type || 'info',
+            actionLabel: messageOrObj.actionLabel,
+            onAction: messageOrObj.onAction,
+            duration: messageOrObj.duration || duration,
+          };
     setToast(toastObj);
     setTimeout(() => setToast(null), toastObj.duration || duration);
   };
@@ -50,7 +72,7 @@ export function AppProvider({ children }) {
   };
 
   const clearNotification = (id) => {
-    setNotifications(notifications.filter(n => n.id !== id));
+    setNotifications(notifications.filter((n) => n.id !== id));
   };
 
   const value = {

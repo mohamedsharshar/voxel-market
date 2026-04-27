@@ -1,16 +1,16 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Environment, useProgress, Html } from '@react-three/drei';
+import { OrbitControls, useGLTF, Environment, useProgress } from '@react-three/drei';
 import { RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
 function Model({ url, wireframe, metalness, roughness }) {
   const { scene } = useGLTF(url);
-  
+
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
         const materials = Array.isArray(child.material) ? child.material : [child.material];
-        materials.forEach(mat => {
+        materials.forEach((mat) => {
           mat.wireframe = wireframe;
           if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
             mat.metalness = metalness;
@@ -38,14 +38,14 @@ function LoadingBox() {
   );
 }
 
-export default function Model3DViewer({ modelUrl, modelName }) {
+export default function Model3DViewer({ modelUrl }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [error, setError] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
   const [wireframe, setWireframe] = useState(false);
   const [metalness, setMetalness] = useState(0.5);
   const [roughness, setRoughness] = useState(0.5);
-  
+
   const controlsRef = useRef();
 
   const handleReset = () => {
@@ -69,12 +69,21 @@ export default function Model3DViewer({ modelUrl, modelName }) {
     return (
       <div className="model-viewer-error">
         <div className="error-content">
-          <div className="error-icon" aria-hidden>⚠️</div>
+          <div className="error-icon" aria-hidden>
+            ⚠️
+          </div>
           <h3>Unable to load 3D model</h3>
-          <p>The model file could not be loaded. Please try again later. Try refreshing or downloading the file.</p>
+          <p>
+            The model file could not be loaded. Please try again later. Try refreshing or
+            downloading the file.
+          </p>
           <div role="alert" className="model-error-actions">
-            <button className="btn-primary" onClick={() => window.location.reload()}>Reload</button>
-            <button className="btn-secondary" onClick={() => setError(false)}>Show placeholder</button>
+            <button className="btn-primary" onClick={() => window.location.reload()}>
+              Reload
+            </button>
+            <button className="btn-secondary" onClick={() => setError(false)}>
+              Show placeholder
+            </button>
           </div>
         </div>
       </div>
@@ -82,23 +91,33 @@ export default function Model3DViewer({ modelUrl, modelName }) {
   }
 
   return (
-    <div className={`model-viewer-container ${isFullscreen ? 'fullscreen' : ''}`} aria-busy={isLoading}>
+    <div
+      className={`model-viewer-container ${isFullscreen ? 'fullscreen' : ''}`}
+      aria-busy={isLoading}
+    >
       <div className="model-viewer">
         <Canvas
           shadows
           camera={{ position: [0, 0, 5], fov: 50 }}
-          onCreated={({ gl }) => { gl.setClearColor('#0a0d10'); }}
+          onCreated={({ gl }) => {
+            gl.setClearColor('#0a0d10');
+          }}
         >
           <Suspense fallback={<LoadingBox />}>
             <ambientLight intensity={0.5} />
             <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
             <directionalLight position={[-10, -10, -5]} intensity={0.3} />
             <pointLight position={[0, 5, 0]} intensity={0.5} />
-            
+
             <Environment preset="city" />
-            
-            <Model url={modelUrl} wireframe={wireframe} metalness={metalness} roughness={roughness} />
-            
+
+            <Model
+              url={modelUrl}
+              wireframe={wireframe}
+              metalness={metalness}
+              roughness={roughness}
+            />
+
             <OrbitControls
               ref={controlsRef}
               enablePan={true}
@@ -122,19 +141,38 @@ export default function Model3DViewer({ modelUrl, modelName }) {
 
         <div className="viewer-controls-bar">
           <div className="controls-left">
-            <label className="toggle-switch-label" aria-pressed={autoRotate} role="switch" aria-checked={autoRotate} tabIndex={0}>
-              <div className={`toggle-switch ${autoRotate ? 'on' : ''}`} onClick={() => setAutoRotate(!autoRotate)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setAutoRotate(!autoRotate); }}>
+            <label
+              className="toggle-switch-label"
+              aria-pressed={autoRotate}
+              role="switch"
+              aria-checked={autoRotate}
+              tabIndex={0}
+            >
+              <div
+                className={`toggle-switch ${autoRotate ? 'on' : ''}`}
+                onClick={() => setAutoRotate(!autoRotate)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') setAutoRotate(!autoRotate);
+                }}
+              >
                 <div className="toggle-knob"></div>
               </div>
               <RotateCcw size={14} /> <span>Rotate</span>
             </label>
             <label className="toggle-switch-label">
-              <div className={`toggle-switch ${wireframe ? 'on' : ''}`} onClick={() => setWireframe(!wireframe)}>
+              <div
+                className={`toggle-switch ${wireframe ? 'on' : ''}`}
+                onClick={() => setWireframe(!wireframe)}
+              >
                 <div className="toggle-knob"></div>
               </div>
               Wireframe
             </label>
-            <button className="reset-view-btn" onClick={handleReset} aria-label="Reset view to default">
+            <button
+              className="reset-view-btn"
+              onClick={handleReset}
+              aria-label="Reset view to default"
+            >
               <RotateCcw size={14} /> Reset View
             </button>
           </div>
@@ -144,19 +182,35 @@ export default function Model3DViewer({ modelUrl, modelName }) {
                 <span>Metal</span>
                 <span>{metalness.toFixed(2)}</span>
               </div>
-              <input type="range" min="0" max="1" step="0.01" value={metalness} onChange={e => setMetalness(parseFloat(e.target.value))} className="cyan-slider" />
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={metalness}
+                onChange={(e) => setMetalness(parseFloat(e.target.value))}
+                className="cyan-slider"
+              />
             </div>
             <div className="slider-group">
               <div className="slider-label">
                 <span>Rough</span>
                 <span>{roughness.toFixed(2)}</span>
               </div>
-              <input type="range" min="0" max="1" step="0.01" value={roughness} onChange={e => setRoughness(parseFloat(e.target.value))} className="cyan-slider" />
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={roughness}
+                onChange={(e) => setRoughness(parseFloat(e.target.value))}
+                className="cyan-slider"
+              />
             </div>
-            <button 
-              className="viewer-control-btn fullscreen-btn" 
+            <button
+              className="viewer-control-btn fullscreen-btn"
               onClick={toggleFullscreen}
-              title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+              title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
             >
               {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
@@ -164,9 +218,7 @@ export default function Model3DViewer({ modelUrl, modelName }) {
         </div>
       </div>
 
-      {isFullscreen && (
-        <div className="fullscreen-overlay" onClick={toggleFullscreen} />
-      )}
+      {isFullscreen && <div className="fullscreen-overlay" onClick={toggleFullscreen} />}
     </div>
   );
 }

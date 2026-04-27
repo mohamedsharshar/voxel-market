@@ -18,11 +18,22 @@ export default function Toast() {
       {icons[toast.type]}
       <span>{toast.message}</span>
       {toast.actionLabel && toast.onAction && (
-        <button className="toast-action" onClick={() => { toast.onAction(); showToast(null); }} aria-label={toast.actionLabel}>
+        <button
+          className="toast-action"
+          onClick={() => {
+            toast.onAction();
+            showToast(null);
+          }}
+          aria-label={toast.actionLabel}
+        >
           {toast.actionLabel}
         </button>
       )}
-      <button onClick={() => showToast(null)} className="toast-close" aria-label="Close notification">
+      <button
+        onClick={() => showToast(null)}
+        className="toast-close"
+        aria-label="Close notification"
+      >
         <X size={14} />
       </button>
     </div>
