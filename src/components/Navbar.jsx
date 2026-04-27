@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Box } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 export default function Navbar({ onLoginClick, onSignupClick }) {
   const navigate = useNavigate();
+  const { cart } = useApp();
   const [q, setQ] = React.useState('');
 
   const handleSearch = (e) => {
@@ -35,8 +37,9 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
         </form>
 
         <div className="nav-actions">
-          <Link to="/browse" className="nav-cart">
+          <Link to="/cart" className="nav-cart">
             <ShoppingCart size={18} />
+            {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
           </Link>
           <button className="btn-login" onClick={onLoginClick}>Log in</button>
           <button className="btn-signup" onClick={onSignupClick}>Sign up</button>

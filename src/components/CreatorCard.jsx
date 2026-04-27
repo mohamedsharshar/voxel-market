@@ -1,9 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BadgeCheck, Box, DollarSign } from 'lucide-react';
 
 export default function CreatorCard({ creator }) {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    const slug = creator.name.toLowerCase().replace(/\s+/g, '-');
+    navigate(`/creator/${slug}`);
+  };
+
   return (
-    <div className="creator-card">
+    <div className="creator-card" onClick={handleClick}>
       <div className="creator-avatar">
         {creator.initial}
         {creator.verified && (
