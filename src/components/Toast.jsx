@@ -14,10 +14,15 @@ export default function Toast() {
   };
 
   return (
-    <div className={`toast toast-${toast.type}`}>
+    <div className={`toast toast-${toast.type}`} role="status" aria-live="polite">
       {icons[toast.type]}
       <span>{toast.message}</span>
-      <button onClick={() => showToast(null)} className="toast-close">
+      {toast.actionLabel && toast.onAction && (
+        <button className="toast-action" onClick={() => { toast.onAction(); showToast(null); }} aria-label={toast.actionLabel}>
+          {toast.actionLabel}
+        </button>
+      )}
+      <button onClick={() => showToast(null)} className="toast-close" aria-label="Close notification">
         <X size={14} />
       </button>
     </div>

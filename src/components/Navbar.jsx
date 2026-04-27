@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Box } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -14,33 +14,37 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
   };
 
   return (
-    <nav className="navbar">
+    <nav className="navbar" role="navigation" aria-label="Main navigation">
       <div className="nav-inner">
-        <Link to="/" className="nav-logo">
+        <NavLink to="/" className="nav-logo"> 
           <Box size={24} />
           Voxel Market
-        </Link>
+        </NavLink>
 
         <div className="nav-links">
-          <Link to="/browse" className="nav-link">Browse</Link>
-          <Link to="/creators" className="nav-link">Creators</Link>
+          <NavLink to="/browse" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`} aria-current={({isActive}) => isActive ? 'page' : undefined}>Browse</NavLink>
+          <NavLink to="/creators" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`} aria-current={({isActive}) => isActive ? 'page' : undefined}>Creators</NavLink>
         </div>
 
-        <form className="nav-search" onSubmit={handleSearch}>
+        <form className="nav-search" onSubmit={handleSearch} role="search" aria-label="Search models">
           <Search size={16} />
+          <label className="visually-hidden" htmlFor="nav-search-input">Search models</label>
           <input
+            id="nav-search-input"
             type="text"
             placeholder="Search models..."
+            aria-label="Search models"
             value={q}
             onChange={e => setQ(e.target.value)}
           />
+          <button type="submit" className="visually-hidden">Search</button>
         </form>
 
         <div className="nav-actions">
-          <Link to="/cart" className="nav-cart">
+          <NavLink to="/cart" className="nav-cart" aria-label={`Open cart (${cart.length} items)`}>
             <ShoppingCart size={18} />
-            {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
-          </Link>
+            {cart.length > 0 && <span className="cart-badge" aria-hidden>{cart.length}</span>}
+          </NavLink>
           <button className="btn-login" onClick={onLoginClick}>Log in</button>
           <button className="btn-signup" onClick={onSignupClick}>Sign up</button>
         </div>

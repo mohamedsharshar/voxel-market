@@ -29,6 +29,16 @@
 
 html { scroll-behavior: smooth; }
 
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+}
+.skip-link:focus {
+  left: 12px; top: 12px; width: auto; height: auto; padding: 8px 12px; background: var(--cyan); color: #000; border-radius: 6px; z-index: 9999;
+}
+
+.visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; }
+
 body {
   font-family: 'Space Grotesk', -apple-system, sans-serif;
   background-color: var(--bg-primary);
@@ -40,6 +50,31 @@ body {
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 input, select { font-family: inherit; }
+
+/* focus-visible outlines for keyboard users */
+a:focus, button:focus, input:focus, .model-card:focus {
+  outline: 3px solid rgba(0,212,255,0.18);
+  outline-offset: 2px;
+}
+
+/* Global loader */
+.global-loader {
+  position: fixed; left: 0; top: 0; height: 4px; width: 100%; z-index: 9999;
+  background: linear-gradient(90deg, rgba(0,212,255,0.12), rgba(0,212,255,0.18));
+}
+.global-loader-bar { height: 100%; width: 50%; background: var(--cyan); box-shadow: 0 4px 12px rgba(0,212,255,0.12); transform-origin: left; animation: loader-move 1.2s linear infinite; }
+@keyframes loader-move { 0% { transform: translateX(-25%); } 100% { transform: translateX(125%); } }
+
+/* viewer loading overlay */
+.viewer-loading-overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent);
+  color: var(--white);
+}
+.viewer-loading-inner { display:flex; gap:12px; align-items:center; padding:12px 18px; background: rgba(0,0,0,0.5); border-radius: 8px; }
+.viewer-spinner { width:18px; height:18px; border-radius:50%; box-shadow: 0 0 0 2px rgba(255,255,255,0.06) inset; border: 2px solid rgba(255,255,255,0.12); border-top-color: var(--cyan); animation: spin 1s linear infinite; }
+.viewer-loading-text { font-size:13px; color:var(--text-secondary); }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 6px; }

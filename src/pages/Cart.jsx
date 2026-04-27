@@ -4,7 +4,7 @@ import { ShoppingCart, Trash2, ArrowRight, BadgeCheck } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export default function Cart() {
-  const { cart, removeFromCart, clearCart, showToast } = useApp();
+  const { cart, removeFromCart, clearCart, showToast, setGlobalLoading } = useApp();
   const navigate = useNavigate();
 
   const subtotal = cart.reduce((sum, item) => {
@@ -15,7 +15,11 @@ export default function Cart() {
   const total = subtotal + tax;
 
   const handleCheckout = () => {
-    showToast('Checkout feature coming soon!', 'info');
+    setGlobalLoading(true);
+    setTimeout(() => {
+      setGlobalLoading(false);
+      showToast('Checkout feature coming soon!', 'info');
+    }, 600);
   };
 
   if (cart.length === 0) {
@@ -35,9 +39,19 @@ export default function Cart() {
 
   return (
     <div className="page">
-      <div className="cart-header">
+        <div className="cart-header">
         <h1>Shopping Cart</h1>
-        <button className="btn-clear-cart" onClick={clearCart}>
+        <button className="btn-clear-cart" onClick={() => {
+          if (cart.length === 0) return;
+          const ok = window.confirm('Clear cart? This will remove all items.');
+          if (!ok) return;
+          setGlobalLoading(true);
+          setTimeout(() => {
+            clearCart();
+            setGlobalLoading(false);
+            showToast('Cart cleared', 'info');
+          }, 400);
+        }}>
           <Trash2 size={16} />
           Clear Cart
         </button>
@@ -68,6 +82,7 @@ export default function Cart() {
               <button 
                 className="cart-item-remove"
                 onClick={() => removeFromCart(item.id)}
+                aria-label={`Remove ${item.name} from cart`}
               >
                 <Trash2 size={18} />
               </button>

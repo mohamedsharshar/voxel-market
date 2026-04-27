@@ -7,6 +7,7 @@ export function AppProvider({ children }) {
   const [notifications, setNotifications] = React.useState([]);
   const [toast, setToast] = React.useState(null);
   const [user, setUser] = React.useState(null);
+  const [globalLoading, setGlobalLoading] = React.useState(false);
 
   const addToCart = (model) => {
     const exists = cart.find(item => item.id === model.id);
@@ -19,18 +20,29 @@ export function AppProvider({ children }) {
   };
 
   const removeFromCart = (modelId) => {
+    const removed = cart.find(item => item.id === modelId);
     setCart(cart.filter(item => item.id !== modelId));
-    showToast('Removed from cart', 'info');
+    if (removed) {
+      showToast({ message: 'Removed from cart', type: 'info', actionLabel: 'Undo', onAction: () => {
+        setCart(prev => [removed, ...prev]);
+      }});
+    } else {
+      showToast('Removed from cart', 'info');
+    }
   };
 
   const clearCart = () => {
     setCart([]);
   };
 
-  const showToast = (message, type = 'info') => {
+  const showToast = (messageOrObj, type = 'info', actionLabel = null, onAction = null, duration = 3000) => {
+    if (!messageOrObj) { setToast(null); return; }
     const id = Date.now();
-    setToast({ id, message, type });
-    setTimeout(() => setToast(null), 3000);
+    const toastObj = typeof messageOrObj === 'string'
+      ? { id, message: messageOrObj, type, actionLabel, onAction, duration }
+      : { id, message: messageOrObj.message, type: messageOrObj.type || 'info', actionLabel: messageOrObj.actionLabel, onAction: messageOrObj.onAction, duration: messageOrObj.duration || duration };
+    setToast(toastObj);
+    setTimeout(() => setToast(null), toastObj.duration || duration);
   };
 
   const addNotification = (notification) => {
@@ -53,6 +65,8 @@ export function AppProvider({ children }) {
     showToast,
     user,
     setUser,
+    globalLoading,
+    setGlobalLoading,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

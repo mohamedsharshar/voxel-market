@@ -26,7 +26,10 @@ export default function ModelCard({ model, nameWhite = false }) {
   return (
     <div 
       className="model-card"
+      role="button"
+      tabIndex={0}
       onClick={() => navigate(`/model/${model.id}`)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/model/${model.id}`); }}
       onMouseEnter={() => setShowQuickAdd(true)}
       onMouseLeave={() => setShowQuickAdd(false)}
     >
@@ -42,7 +45,7 @@ export default function ModelCard({ model, nameWhite = false }) {
           {likes}
         </button>
         {showQuickAdd && !inCart && (
-          <button className="model-card-quick-add" onClick={handleQuickAdd}>
+          <button className="model-card-quick-add" onClick={handleQuickAdd} aria-label={`Add ${model.name} to cart`}>
             <ShoppingCart size={16} />
             Quick Add
           </button>

@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
+import { OrbitControls, useGLTF, Environment, useProgress, Html } from '@react-three/drei';
 import { RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
 function Model({ url, wireframe, metalness, roughness }) {
@@ -62,27 +62,32 @@ export default function Model3DViewer({ modelUrl, modelName }) {
     setIsFullscreen(!isFullscreen);
   };
 
+  const { active, progress } = useProgress();
+  const isLoading = active && progress < 100;
+
   if (error) {
     return (
       <div className="model-viewer-error">
         <div className="error-content">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon" aria-hidden>⚠️</div>
           <h3>Unable to load 3D model</h3>
-          <p>The model file could not be loaded. Please try again later.</p>
+          <p>The model file could not be loaded. Please try again later. Try refreshing or downloading the file.</p>
+          <div role="alert" className="model-error-actions">
+            <button className="btn-primary" onClick={() => window.location.reload()}>Reload</button>
+            <button className="btn-secondary" onClick={() => setError(false)}>Show placeholder</button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`model-viewer-container ${isFullscreen ? 'fullscreen' : ''}`}>
+    <div className={`model-viewer-container ${isFullscreen ? 'fullscreen' : ''}`} aria-busy={isLoading}>
       <div className="model-viewer">
         <Canvas
           shadows
           camera={{ position: [0, 0, 5], fov: 50 }}
-          onCreated={({ gl }) => {
-            gl.setClearColor('#0a0d10');
-          }}
+          onCreated={({ gl }) => { gl.setClearColor('#0a0d10'); }}
         >
           <Suspense fallback={<LoadingBox />}>
             <ambientLight intensity={0.5} />
@@ -106,13 +111,22 @@ export default function Model3DViewer({ modelUrl, modelName }) {
           </Suspense>
         </Canvas>
 
+        {isLoading && (
+          <div className="viewer-loading-overlay" role="status" aria-live="polite">
+            <div className="viewer-loading-inner">
+              <div className="viewer-spinner" aria-hidden />
+              <div className="viewer-loading-text">Loading model — {Math.round(progress)}%</div>
+            </div>
+          </div>
+        )}
+
         <div className="viewer-controls-bar">
           <div className="controls-left">
-            <label className="toggle-switch-label">
-              <div className={`toggle-switch ${autoRotate ? 'on' : ''}`} onClick={() => setAutoRotate(!autoRotate)}>
+            <label className="toggle-switch-label" aria-pressed={autoRotate} role="switch" aria-checked={autoRotate} tabIndex={0}>
+              <div className={`toggle-switch ${autoRotate ? 'on' : ''}`} onClick={() => setAutoRotate(!autoRotate)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setAutoRotate(!autoRotate); }}>
                 <div className="toggle-knob"></div>
               </div>
-              <RotateCcw size={14} /> Rotate
+              <RotateCcw size={14} /> <span>Rotate</span>
             </label>
             <label className="toggle-switch-label">
               <div className={`toggle-switch ${wireframe ? 'on' : ''}`} onClick={() => setWireframe(!wireframe)}>
@@ -120,7 +134,7 @@ export default function Model3DViewer({ modelUrl, modelName }) {
               </div>
               Wireframe
             </label>
-            <button className="reset-view-btn" onClick={handleReset}>
+            <button className="reset-view-btn" onClick={handleReset} aria-label="Reset view to default">
               <RotateCcw size={14} /> Reset View
             </button>
           </div>

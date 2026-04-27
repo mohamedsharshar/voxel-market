@@ -50,6 +50,8 @@ export default function Home() {
               key={cat.name}
               className={`category-pill${activeCategory === cat.name ? ' active' : ''}`}
               onClick={() => setActiveCategory(cat.name === activeCategory ? 'All' : cat.name)}
+              aria-pressed={activeCategory === cat.name}
+              aria-label={`Filter by ${cat.name}`}
             >
               {cat.name} <span className="count">{cat.count}</span>
             </button>

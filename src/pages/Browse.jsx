@@ -15,6 +15,10 @@ function CustomSelect({ value, options, onChange }) {
       <button
         className={`custom-select-trigger ${open ? 'open' : ''}`}
         onClick={() => setOpen(!open)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={`custom-select-${value.replace(/\s+/g, '-')}`}
+        type="button"
       >
         <span>{value}</span>
         <ChevronDown size={14} style={{ color: 'var(--text-muted)' }} />
@@ -23,12 +27,16 @@ function CustomSelect({ value, options, onChange }) {
       {open && (
         <>
           <div style={{ position: 'fixed', inset: 0, zIndex: 40 }} onClick={() => setOpen(false)} />
-          <div className="custom-select-menu">
+          <div id={`custom-select-${value.replace(/\s+/g, '-')}`} className="custom-select-menu" role="listbox">
             {options.map(opt => (
               <div
                 key={opt}
+                role="option"
+                tabIndex={0}
+                aria-selected={value === opt}
                 className={`custom-select-option ${value === opt ? 'active' : ''}`}
                 onClick={() => { onChange(opt); setOpen(false); }}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { onChange(opt); setOpen(false); } }}
               >
                 {opt}
                 {value === opt && <Check size={14} />}
@@ -80,12 +88,15 @@ export default function Browse() {
           <div className="filter-group">
             <div className="filter-input-wrap">
               <Search size={14} />
+              <label htmlFor="browse-search" className="visually-hidden">Search models</label>
               <input
+                id="browse-search"
                 className="filter-input"
                 placeholder="Search models..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 style={{ paddingLeft: 36 }}
+                aria-label="Search models"
               />
             </div>
           </div>
@@ -116,7 +127,11 @@ export default function Browse() {
               <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Verified Creators Only</span>
               <div
                 className={`toggle-switch${verifiedOnly ? ' on' : ''}`}
+                role="switch"
+                tabIndex={0}
+                aria-checked={verifiedOnly}
                 onClick={() => setVerifiedOnly(v => !v)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setVerifiedOnly(v => !v); }}
               >
                 <div className="toggle-knob" />
               </div>

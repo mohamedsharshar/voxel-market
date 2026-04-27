@@ -4,7 +4,7 @@ import { Box } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer>
+    <footer role="contentinfo" aria-label="Footer">
       <div className="footer-inner">
         <div className="footer-brand">
           <div className="footer-logo">

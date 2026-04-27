@@ -14,52 +14,129 @@ function GoogleIcon() {
 
 export default function AuthModal({ mode, onClose, onSwitch }) {
   const isLogin = mode === 'login';
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState(null);
+  const firstInputRef = React.useRef(null);
+  const modalRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  React.useEffect(() => {
+    // focus first input for keyboard users
+    setTimeout(() => firstInputRef.current && firstInputRef.current.focus(), 10);
+  }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.key !== 'Tab' || !modalRef.current) return;
+    const focusable = modalRef.current.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
+    if (!focusable || focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError(null);
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    if (!isLogin && (!password || password.length < 6)) {
+      setError('Please enter a password with 6+ characters');
+      return;
+    }
+
+    // placeholder: would call auth API
+    onClose();
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={e => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}><X size={16} /></button>
+      <div ref={modalRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" aria-describedby="auth-desc" onClick={e => e.stopPropagation()} onKeyDown={handleKeyDown}>
+        <button className="modal-close" onClick={onClose} aria-label="Close dialog"><X size={16} /></button>
 
-        <div className="modal-icon"><Box size={26} /></div>
+        <div className="modal-icon" aria-hidden><Box size={26} /></div>
 
-        <h2 className="modal-title">
-          {isLogin ? 'Sign in to Model Market Hub' : 'Create your account'}
+        <h2 id="auth-title" className="modal-title">
+          {isLogin ? 'Sign in to Voxel Market' : 'Create your account'}
         </h2>
-        <p className="modal-sub">
+        <p id="auth-desc" className="modal-sub">
           {isLogin ? 'Welcome back! Please sign in to continue' : 'Welcome! Please fill in the details to get started.'}
         </p>
 
-        <button className="btn-google">
+        <button className="btn-google" type="button" aria-label="Continue with Google">
           <GoogleIcon />
           Continue with Google
         </button>
 
-        <div className="modal-divider">or</div>
+        <div className="modal-divider" aria-hidden>or</div>
 
-        <div className="modal-field">
-          <label>Email address</label>
-          <input type="email" placeholder="Enter your email address" />
-        </div>
-
-        {!isLogin && (
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="modal-field">
-            <label>Password</label>
-            <input type="password" placeholder="Create a password" />
+            <label htmlFor="auth-email">Email address</label>
+            <input
+              id="auth-email"
+              ref={firstInputRef}
+              name="email"
+              type="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              aria-required="true"
+              aria-invalid={error ? 'true' : 'false'}
+            />
           </div>
-        )}
 
-        <button className="btn-modal-submit">
-          Continue <ChevronRight size={16} />
-        </button>
+          {!isLogin && (
+            <div className="modal-field">
+              <label htmlFor="auth-password">Password</label>
+              <input
+                id="auth-password"
+                name="password"
+                type="password"
+                placeholder="Create a password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                aria-required="true"
+              />
+            </div>
+          )}
+
+          {error && (
+            <div role="alert" className="form-error">{error}</div>
+          )}
+
+          <button className="btn-modal-submit" type="submit" aria-label="Continue">
+            Continue <ChevronRight size={16} />
+          </button>
+        </form>
 
         <div className="modal-switch">
           {isLogin ? (
             <>Don't have an account?{' '}
-              <button onClick={() => onSwitch('signup')}>Sign up</button>
+              <button onClick={() => onSwitch('signup')} aria-label="Switch to Sign up">Sign up</button>
             </>
           ) : (
             <>Already have an account?{' '}
-              <button onClick={() => onSwitch('login')}>Sign In</button>
+              <button onClick={() => onSwitch('login')} aria-label="Switch to Sign in">Sign In</button>
             </>
           )}
         </div>

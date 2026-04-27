@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import Navbar from './components/Navbar';
+import GlobalLoader from './components/GlobalLoader';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import Toast from './components/Toast';
@@ -18,12 +19,15 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <Navbar
           onLoginClick={() => setModal('login')}
           onSignupClick={() => setModal('signup')}
         />
+        <GlobalLoader />
 
-        <Routes>
+        <main id="main-content" tabIndex={-1}>
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/creators" element={<Creators />} />
@@ -31,7 +35,9 @@ export default function App() {
           <Route path="/creator/:name" element={<CreatorProfile />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<Home />} />
-        </Routes>
+
+          </Routes>
+        </main>
 
         <Footer />
 

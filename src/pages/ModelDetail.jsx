@@ -9,7 +9,7 @@ import Model3DViewer from '../components/Model3DViewer';
 export default function ModelDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, cart, showToast } = useApp();
+  const { addToCart, cart, showToast, setGlobalLoading } = useApp();
   
   const model = MODELS.find(m => m.id === parseInt(id));
   const [liked, setLiked] = React.useState(false);
@@ -41,9 +41,11 @@ export default function ModelDetail() {
 
   const handleAddToCart = () => {
     setLoading(true);
+    setGlobalLoading(true);
     setTimeout(() => {
       addToCart(model);
       setLoading(false);
+      setGlobalLoading(false);
     }, 500);
   };
 

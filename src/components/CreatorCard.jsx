@@ -11,7 +11,7 @@ export default function CreatorCard({ creator }) {
   };
 
   return (
-    <div className="creator-card" onClick={handleClick}>
+    <div className="creator-card" role="link" tabIndex={0} onClick={handleClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }} aria-label={`Open creator ${creator.name} profile`}>
       <div className="creator-avatar">
         {creator.initial}
         {creator.verified && (
