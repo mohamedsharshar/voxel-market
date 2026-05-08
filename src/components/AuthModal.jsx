@@ -75,7 +75,7 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
       setError('Please enter a valid email address');
       return;
     }
-    if (!isLogin && (!password || password.length < 6)) {
+    if (!password || password.length < 6) {
       setError('Please enter a password with 6+ characters');
       return;
     }
@@ -143,21 +143,19 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
             />
           </div>
 
-          {!isLogin && (
-            <div className="modal-field">
-              <label htmlFor="auth-password">Password</label>
-              <input
-                id="auth-password"
-                name="password"
-                type="password"
-                placeholder="Create a password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                aria-required="true"
-              />
-            </div>
-          )}
+          <div className="modal-field">
+            <label htmlFor="auth-password">Password</label>
+            <input
+              id="auth-password"
+              name="password"
+              type="password"
+              placeholder={isLogin ? 'Enter your password' : 'Create a password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              aria-required="true"
+            />
+          </div>
 
           {error && (
             <div role="alert" className="form-error">

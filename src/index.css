@@ -2528,20 +2528,20 @@ footer {
 }
 
 .dropdown-trigger:hover {
-  background: var(--bg-3);
+  background: var(--bg-card-hover);
 }
 
-.dropdown-menu { margin-top: 0; padding-top: 0;
+.dropdown-menu {
   position: absolute;
   top: 100%;
   right: 0;
   margin-top: 0;
-  background: var(--bg-2);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   padding: 0.5rem;
   min-width: 180px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -2577,8 +2577,8 @@ footer {
 }
 
 .dropdown-item:hover {
-  background: var(--bg-3);
-  color: var(--text-1);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
 }
 
 .dropdown-item.danger {

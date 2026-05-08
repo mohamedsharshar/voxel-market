@@ -15,6 +15,7 @@ import Cart from './pages/Cart';
 import About from './pages/About';
 import Support from './pages/Support';
 import AdminPanel from './pages/AdminPanel';
+import Settings from './pages/Settings';
 
 export default function App() {
   const [modal, setModal] = React.useState(null); // 'login' | 'signup' | null
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/support" element={<Support />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>

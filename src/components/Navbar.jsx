@@ -50,7 +50,7 @@ export default function Navbar({ onLoginClick, onSignupClick }) {
             onMouseEnter={() => setMoreDropdownOpen(true)}
             onMouseLeave={() => setMoreDropdownOpen(false)}
           >
-            <button className="nav-link dropdown-trigger" style={{ padding: 0 }} onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}>
+            <button className="nav-link dropdown-trigger" style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontFamily: 'inherit' }} onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}>
               More <ChevronDown size={14} />
             </button>
             <div className={`dropdown-menu ${moreDropdownOpen ? 'open' : ''}`} style={{ left: 0, right: 'auto', marginTop: '0.5rem' }}>
