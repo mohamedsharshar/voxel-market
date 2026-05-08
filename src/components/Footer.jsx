@@ -31,12 +31,19 @@ export default function Footer() {
             <a href="#dash">Dashboard</a>
           </div>
         </div>
+        <div>
+          <div className="footer-col-title">About</div>
+          <div className="footer-links">
+            <Link to="/about">About Us</Link>
+            <Link to="/support">Support</Link>
+          </div>
+        </div>
       </div>
       <div className="footer-bottom">
         <span className="footer-copy">© 2026 Voxel Market. All rights reserved.</span>
         <div className="footer-legal">
-          <a href="#terms">Terms</a>
-          <a href="#privacy">Privacy</a>
+          <Link to="/terms">Terms</Link>
+          <Link to="/privacy">Privacy</Link>
         </div>
       </div>
     </footer>

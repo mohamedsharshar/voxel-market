@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, Box, ChevronRight } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 function GoogleIcon() {
   return (
@@ -26,6 +27,7 @@ function GoogleIcon() {
 
 export default function AuthModal({ mode, onClose, onSwitch }) {
   const isLogin = mode === 'login';
+  const { setUser, showToast } = useApp();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState(null);
@@ -79,6 +81,10 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
     }
 
     // placeholder: would call auth API
+    const username = email.split('@')[0];
+    const role = email.startsWith('admin') ? 'admin' : 'user';
+    setUser({ email, name: username, role });
+    showToast(isLogin ? `Welcome back, ${username}!` : `Account created for ${username}!`, 'success');
     onClose();
   };
 

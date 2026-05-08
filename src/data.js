@@ -10,7 +10,7 @@ export const MODELS = [
     category: 'Creatures',
     image: 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb',
     featured: true,
     description:
       'A beautifully crafted low-poly dragon model perfect for fantasy games. Features clean topology and game-ready optimization.',
@@ -32,7 +32,7 @@ export const MODELS = [
     category: 'Environment',
     image: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Box/glTF-Binary/Box.glb',
     featured: true,
     description:
       'Modular medieval castle tower with detailed textures. Perfect for building complete fortress environments.',
@@ -54,7 +54,7 @@ export const MODELS = [
     category: 'Vehicles',
     image: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Corset/glTF-Binary/Corset.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Corset/glTF-Binary/Corset.glb',
     featured: true,
     description:
       'Futuristic spaceship with detailed interior. Optimized for real-time rendering in games.',
@@ -76,7 +76,7 @@ export const MODELS = [
     category: 'Weapons',
     image: 'https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
     featured: true,
     description:
       'Detailed fantasy sword with magical runes. Hand-painted textures and game-ready topology.',
@@ -98,7 +98,7 @@ export const MODELS = [
     category: 'Vehicles',
     image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
     featured: true,
     description: 'High-performance racing car with detailed interior. Perfect for racing games.',
     polygons: 22000,
@@ -119,7 +119,7 @@ export const MODELS = [
     category: 'Characters',
     image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb',
     featured: false,
     description:
       'Fully rigged knight character ready for animation. Includes multiple armor pieces.',
@@ -141,7 +141,7 @@ export const MODELS = [
     category: 'Characters',
     image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Lantern/glTF-Binary/Lantern.glb',
     featured: false,
     description: 'Cute robot companion with modular parts. Perfect for sci-fi games.',
     polygons: 8900,
@@ -162,7 +162,7 @@ export const MODELS = [
     category: 'Environment',
     image: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Avocado/glTF-Binary/Avocado.glb',
     featured: false,
     description:
       'Stylized fantasy tree with glowing leaves. Great for magical forest environments.',
@@ -184,7 +184,7 @@ export const MODELS = [
     category: 'Weapons',
     image: 'https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=800&q=80',
     modelUrl:
-      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
     featured: false,
     description: 'Futuristic laser gun with animated parts. Includes muzzle flash effects.',
     polygons: 4200,

@@ -12,6 +12,9 @@ import Creators from './pages/Creators';
 import ModelDetail from './pages/ModelDetail';
 import CreatorProfile from './pages/CreatorProfile';
 import Cart from './pages/Cart';
+import About from './pages/About';
+import Support from './pages/Support';
+import AdminPanel from './pages/AdminPanel';
 
 export default function App() {
   const [modal, setModal] = React.useState(null); // 'login' | 'signup' | null
@@ -33,6 +36,9 @@ export default function App() {
             <Route path="/model/:id" element={<ModelDetail />} />
             <Route path="/creator/:name" element={<CreatorProfile />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
