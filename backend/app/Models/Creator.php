@@ -16,6 +16,7 @@ class Creator extends Model
         'bio',
         'models_count',
         'sales',
+        'followers',
         'verified',
     ];
 
@@ -24,6 +25,12 @@ class Creator extends Model
     ];
 
     public function voxelModels()
+    {
+        return $this->hasMany(VoxelModel::class);
+    }
+
+    // Alias for convenience
+    public function models()
     {
         return $this->hasMany(VoxelModel::class);
     }

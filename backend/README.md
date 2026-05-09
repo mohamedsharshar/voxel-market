@@ -7,6 +7,52 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# Voxel Market Backend (Laravel API)
+
+ده الـ backend بتاع مشروع **Voxel Market**.
+
+## تشغيل سريع (Windows / Laragon)
+
+### 1) تثبيت Dependencies
+
+> لو شفت خطأ `vendor/autoload.php` يبقى لازم تعمل install.
+
+```bash
+composer install
+```
+
+### 2) إعداد `.env`
+
+`.env` مش بيتحط على git.
+
+```bash
+copy .env.example .env
+php artisan key:generate
+```
+
+بعدها عدّل إعدادات الداتابيز في `.env` لـ MySQL (لأن `.env.example` الافتراضي بتاع Laravel غالباً بيكون SQLite).
+
+### 3) MySQL + Migrations
+
+اعمل Database باسم `voxel_market` (أو عدّل القيم في `.env`).
+
+```bash
+php artisan migrate
+```
+
+### 4) تشغيل السيرفر
+
+```bash
+php artisan serve
+```
+
+## أماكن الملفات المهمة
+
+- API Routes: `routes/api.php`
+- Controllers: `app/Http/Controllers/`
+- Models: `app/Models/`
+- Migrations/Seeders: `database/`
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

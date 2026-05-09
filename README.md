@@ -2,9 +2,43 @@
 
 سوق إلكتروني متطور لبيع وشراء نماذج 3D للألعاب والمشاريع الإبداعية، مع **عارض 3D تفاعلي** مبني بتقنيات حديثة ومصمم وفقاً لمبادئ **HCI**.
 
+## 🎉 تم نقل الفرونت إند إلى Laravel بنجاح!
+
+المشروع الآن يعمل بـ **Laravel + Livewire + Alpine.js** بدلاً من React!
+
 ---
 
 ## 🚀 التشغيل السريع
+
+### Laravel Backend (الحالي)
+
+```bash
+# 1. الانتقال للمجلد
+cd backend
+
+# 2. تثبيت Dependencies
+composer install
+
+# 3. إعداد البيئة
+cp .env.example .env
+php artisan key:generate
+
+# 4. إعداد Database
+# في .env: DB_DATABASE=voxel_market
+CREATE DATABASE voxel_market;
+
+# 5. تشغيل Migrations & Seeder
+php artisan migrate
+php artisan db:seed --class=VoxelMarketSeeder
+
+# 6. تشغيل السيرفر
+php artisan serve
+
+# 7. افتح المتصفح
+http://127.0.0.1:8000
+```
+
+### React Frontend (القديم - للمرجع فقط)
 
 ```bash
 # 1. تثبيت المكتبات
@@ -16,6 +50,77 @@ npm run dev
 # 3. افتح المتصفح
 http://localhost:5173
 ```
+
+---
+
+## 🧩 تشغيل الـ Backend (Laravel API) + MySQL
+
+> ملاحظة: فولدر [backend/README.md](backend/README.md) في الأصل كان README افتراضي بتاع Laravel. الدوكس هنا بتوضح تشغيل مشروع Voxel Market نفسه.
+
+### 1) تجهيز Dependencies (حل مشكلة `vendor/autoload.php`)
+
+لو ظهرلك الخطأ ده:
+
+```
+Warning: require(.../backend/vendor/autoload.php): Failed to open stream
+Fatal error: Failed opening required '.../backend/vendor/autoload.php'
+```
+
+ده معناه إنك لسه ماعملتش تثبيت PHP packages (لأن `vendor/` متعمله ignore في git).
+
+نفّذ:
+
+```bash
+cd backend
+composer install
+```
+
+### 2) إعداد ملف البيئة `.env`
+
+ملف `.env` برضه متعمله ignore في git، فلو مش موجود عندك:
+
+```bash
+cd backend
+copy .env.example .env
+php artisan key:generate
+```
+
+بعد كده افتح `backend/.env` وعدّل إعدادات الداتابيز لـ MySQL (لأن `.env.example` الافتراضي بتاع Laravel بيكون SQLite).
+
+### 3) إعداد MySQL
+
+اعمل Database باسم `voxel_market` (أو غيّر الاسم في `.env`).
+
+الإعدادات الافتراضية في `.env`:
+
+- `DB_CONNECTION=mysql`
+- `DB_HOST=127.0.0.1`
+- `DB_PORT=3306`
+- `DB_DATABASE=voxel_market`
+- `DB_USERNAME=root`
+- `DB_PASSWORD=`
+
+### 4) تشغيل الميجريشن والسيرفر
+
+```bash
+cd backend
+php artisan migrate
+php artisan serve
+```
+
+الـ API هتبقى افتراضياً على: `http://127.0.0.1:8000`
+
+---
+
+## 🗂️ فين الصفحات/الكنترولرز/المودلز؟
+
+- صفحات الواجهة (React) موجودة في `src/pages/`
+- مكوّنات الواجهة في `src/components/`
+- الـ Backend (Laravel) جواه:
+  - Controllers: `backend/app/Http/Controllers/`
+  - Models: `backend/app/Models/`
+  - Routes: `backend/routes/api.php`
+  - Migrations/Seeders: `backend/database/`
 
 ---
 

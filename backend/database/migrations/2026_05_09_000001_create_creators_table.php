@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->integer('models_count')->default(0);
             $table->integer('sales')->default(0);
+            $table->integer('followers')->default(0);
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });
