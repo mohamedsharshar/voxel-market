@@ -1,4 +1,5 @@
 import React from 'react';
+import { MODELS, CREATORS } from '../data';
 
 const AppContext = React.createContext();
 
@@ -8,6 +9,8 @@ export function AppProvider({ children }) {
   const [toast, setToast] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [globalLoading, setGlobalLoading] = React.useState(false);
+  const [models, setModels] = React.useState(MODELS);
+  const [creators, setCreators] = React.useState(CREATORS);
 
   const addToCart = (model) => {
     const exists = cart.find((item) => item.id === model.id);
@@ -89,6 +92,10 @@ export function AppProvider({ children }) {
     setUser,
     globalLoading,
     setGlobalLoading,
+    models,
+    setModels,
+    creators,
+    setCreators,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

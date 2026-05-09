@@ -8,7 +8,7 @@ export const MODELS = [
     creator: 'Sofia Beasts',
     verified: true,
     category: 'Creatures',
-    image: 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1618331835717-801e976710b2?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb',
     featured: true,
@@ -30,7 +30,7 @@ export const MODELS = [
     creator: 'Omar Builds',
     verified: true,
     category: 'Environment',
-    image: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1634152962476-4b8a00e1915c?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Box/glTF-Binary/Box.glb',
     featured: true,
@@ -52,7 +52,7 @@ export const MODELS = [
     creator: 'Kenji Makes',
     verified: true,
     category: 'Vehicles',
-    image: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Corset/glTF-Binary/Corset.glb',
     featured: true,
@@ -74,7 +74,7 @@ export const MODELS = [
     creator: 'Lina Forge',
     verified: true,
     category: 'Weapons',
-    image: 'https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
     featured: true,
@@ -96,7 +96,7 @@ export const MODELS = [
     creator: 'Kenji Makes',
     verified: true,
     category: 'Vehicles',
-    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
     featured: true,
@@ -117,7 +117,7 @@ export const MODELS = [
     creator: 'Aria Voxel',
     verified: true,
     category: 'Characters',
-    image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb',
     featured: false,
@@ -139,7 +139,7 @@ export const MODELS = [
     creator: 'Ravi Craft',
     verified: false,
     category: 'Characters',
-    image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1633398361623-b87e22135c36?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Lantern/glTF-Binary/Lantern.glb',
     featured: false,
@@ -160,7 +160,7 @@ export const MODELS = [
     creator: 'Omar Builds',
     verified: true,
     category: 'Environment',
-    image: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Avocado/glTF-Binary/Avocado.glb',
     featured: false,
@@ -182,7 +182,7 @@ export const MODELS = [
     creator: 'Lina Forge',
     verified: true,
     category: 'Weapons',
-    image: 'https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&q=80',
     modelUrl:
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
     featured: false,

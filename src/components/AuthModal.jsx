@@ -80,12 +80,41 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
       return;
     }
 
-    // placeholder: would call auth API
-    const username = email.split('@')[0];
-    const role = email.startsWith('admin') ? 'admin' : 'user';
-    setUser({ email, name: username, role });
-    showToast(isLogin ? `Welcome back, ${username}!` : `Account created for ${username}!`, 'success');
-    onClose();
+    // Default mock users
+    const defaultUsers = [
+      { email: 'admin@voxelmarket.com', password: 'admin123456', role: 'admin', name: 'admin' },
+      { email: 'user@voxelmarket.com', password: 'user123456', role: 'user', name: 'user' }
+    ];
+
+    let users = JSON.parse(localStorage.getItem('voxel_users') || '[]');
+    if (users.length === 0) {
+      users = defaultUsers;
+      localStorage.setItem('voxel_users', JSON.stringify(users));
+    }
+
+    if (isLogin) {
+      const existingUser = users.find(u => u.email === email && u.password === password);
+      if (existingUser) {
+        setUser({ email: existingUser.email, name: existingUser.name, role: existingUser.role });
+        showToast(`Welcome back, ${existingUser.name}!`, 'success');
+        onClose();
+      } else {
+        setError('Invalid email or password');
+      }
+    } else {
+      const userExists = users.find(u => u.email === email);
+      if (userExists) {
+        setError('Email already in use');
+      } else {
+        const username = email.split('@')[0];
+        const newUser = { email, password, name: username, role: 'user' };
+        users.push(newUser);
+        localStorage.setItem('voxel_users', JSON.stringify(users));
+        setUser({ email: newUser.email, name: newUser.name, role: newUser.role });
+        showToast(`Account created for ${username}!`, 'success');
+        onClose();
+      }
+    }
   };
 
   return (
