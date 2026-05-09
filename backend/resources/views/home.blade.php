@@ -524,7 +524,7 @@
                 </svg>
                 @endif
             </div>
-            <div class="creator-handle">@{{ strtolower(str_replace(' ', '', $creator->name)) }}</div>
+            <div class="creator-handle">{{ $creator->handle }}</div>
             <div class="creator-stats">
                 <div class="creator-stat">
                     <div class="creator-stat-value">{{ $creator->models_count }}</div>
@@ -553,7 +553,7 @@
                 </svg>
                 @endif
             </div>
-            <div class="creator-handle">@{{ strtolower(str_replace(' ', '', $creator->name)) }}</div>
+            <div class="creator-handle">{{ $creator->handle }}</div>
             <div class="creator-stats">
                 <div class="creator-stat">
                     <div class="creator-stat-value">{{ $creator->models_count }}</div>

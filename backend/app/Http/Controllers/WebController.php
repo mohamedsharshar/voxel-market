@@ -105,11 +105,19 @@ class WebController extends Controller
     /**
      * Display creators page
      */
-    public function creators()
+    public function creators(Request $request)
     {
-        $creators = Creator::withCount('models')
-            ->orderBy('models_count', 'desc')
-            ->paginate(12);
+        $query = Creator::withCount('models');
+
+        if ($request->has('q') && $request->q) {
+            $q = $request->q;
+            $query->where(function($qb) use ($q) {
+                $qb->where('name', 'like', '%' . $q . '%')
+                   ->orWhere('handle', 'like', '%' . $q . '%');
+            });
+        }
+
+        $creators = $query->orderBy('models_count', 'desc')->paginate(12);
 
         return view('creators', compact('creators'));
     }
