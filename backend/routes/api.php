@@ -2,61 +2,83 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\VoxelModel;
-use App\Models\Creator;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VoxelModelController;
+use App\Http\Controllers\CreatorController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AdminController;
 
-// Public routes
-Route::get('/models', function () {
-    return VoxelModel::with('creator')->get();
+/*
+|--------------------------------------------------------------------------
+| Public Routes (no auth required)
+|--------------------------------------------------------------------------
+*/
+
+// Models
+Route::get('/models', [VoxelModelController::class, 'index']);
+Route::get('/models/{id}', [VoxelModelController::class, 'show']);
+Route::get('/categories', [VoxelModelController::class, 'categories']);
+Route::post('/models/{id}/like', [VoxelModelController::class, 'like']);
+
+// Creators
+Route::get('/creators', [CreatorController::class, 'index']);
+Route::get('/creators/{id}', [CreatorController::class, 'show']);
+Route::get('/creators/name/{name}', [CreatorController::class, 'findByName']);
+
+// Auth
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes (requires Sanctum token)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Auth
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/password', [AuthController::class, 'changePassword']);
+
+    // Wishlist
+    Route::get('/wishlist', [WishlistController::class, 'index']);
+    Route::post('/wishlist/{modelId}', [WishlistController::class, 'toggle']);
+    Route::get('/wishlist/{modelId}/check', [WishlistController::class, 'check']);
+
+    // Orders
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
 });
 
-Route::get('/creators', function () {
-    return Creator::all();
-});
+/*
+|--------------------------------------------------------------------------
+| Admin Routes (requires auth + admin role)
+|--------------------------------------------------------------------------
+*/
 
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
-    $user = User::where('email', $request->email)->first();
+    // Users management
+    Route::get('/users', [AdminController::class, 'users']);
+    Route::put('/users/{id}/role', [AdminController::class, 'updateUserRole']);
+    Route::delete('/users/{id}', [AdminController::class, 'deleteUser']);
 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid email or password'], 401);
-    }
+    // Models CRUD (admin)
+    Route::post('/models', [VoxelModelController::class, 'store']);
+    Route::put('/models/{id}', [VoxelModelController::class, 'update']);
+    Route::delete('/models/{id}', [VoxelModelController::class, 'destroy']);
 
-    return response()->json([
-        'user' => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-        ]
-    ]);
-});
+    // Creators CRUD (admin)
+    Route::post('/creators', [CreatorController::class, 'store']);
+    Route::put('/creators/{id}', [CreatorController::class, 'update']);
+    Route::delete('/creators/{id}', [CreatorController::class, 'destroy']);
 
-Route::post('/register', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:6',
-    ]);
-
-    $user = User::create([
-        'name' => explode('@', $request->email)[0],
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => 'user',
-    ]);
-
-    return response()->json([
-        'user' => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-        ]
-    ]);
+    // Orders overview
+    Route::get('/orders', [OrderController::class, 'adminIndex']);
 });
