@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Navigate } from 'react-router-dom';
-import { Users, Box, DollarSign, Activity, TrendingUp, ShoppingCart, ArrowUpRight, ArrowDownRight, MoreVertical, Edit, Trash2, Plus, X, Save } from 'lucide-react';
+import { Users, Box, DollarSign, Activity, ShoppingCart, ArrowUpRight, ArrowDownRight, Edit, Trash2, Plus, X, Save } from 'lucide-react';
 
 export default function AdminPanel() {
   const { user, models, setModels, creators, setCreators, showToast } = useApp();

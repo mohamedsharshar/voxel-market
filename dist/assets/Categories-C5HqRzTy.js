@@ -1,0 +1,6 @@
+import{c as r,u as t,j as e,C as c,L as d}from"./index-WPmPABET.js";/**
+ * @license lucide-react v0.383.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const l=r("Grid3x3",[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}],["path",{d:"M3 9h18",key:"1pudct"}],["path",{d:"M3 15h18",key:"5xshup"}],["path",{d:"M9 3v18",key:"fh3hqa"}],["path",{d:"M15 3v18",key:"14nvp0"}]]);function o(){const{models:a}=t();return e.jsxs("div",{className:"page",children:[e.jsxs("div",{className:"page-kicker",children:[e.jsx(l,{size:15})," Categories"]}),e.jsx("div",{className:"section-header",children:e.jsxs("div",{children:[e.jsx("h1",{className:"section-title",children:"Browse by Category"}),e.jsx("p",{className:"section-description",children:"Start from a clear asset class and drill into technical filters from there."})]})}),e.jsx("div",{className:"category-page-grid",children:c.map(s=>{const i=a.find(n=>n.category===s.name)||a[0];return e.jsxs(d,{to:`/browse?category=${encodeURIComponent(s.name)}`,children:[e.jsx("img",{src:i.image,alt:""}),e.jsxs("span",{children:[e.jsx("strong",{children:s.name}),e.jsx("small",{children:s.description}),e.jsxs("em",{children:[s.count," assets"]})]})]},s.name)})})]})}export{o as default};
