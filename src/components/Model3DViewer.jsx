@@ -202,11 +202,11 @@ export default function Model3DViewer({ modelUrl, model }) {
                 Vertices
               </span>
               <span>
-                <strong>{model.textures}</strong>
+                <strong>{model.textures ?? '—'}</strong>
                 Textures
               </span>
               <span>
-                <strong>{model.formats.split(',')[0]}</strong>
+                <strong>{model.formats ? model.formats.split(',')[0] : '—'}</strong>
                 Primary
               </span>
             </div>

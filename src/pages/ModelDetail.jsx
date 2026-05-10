@@ -25,15 +25,56 @@ const Model3DViewer = React.lazy(() => import('../components/Model3DViewer'));
 export default function ModelDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, cart, markViewed, models, toggleWishlist, wishlist } = useApp();
+  const { addToCart, cart, markViewed, models, toggleWishlist, upsertModel, wishlist } = useApp();
   const [activeTab, setActiveTab] = React.useState('Overview');
   const model = models.find((item) => String(item.id) === String(id));
+  const [detailModel, setDetailModel] = React.useState(model);
+  const [loadingDetail, setLoadingDetail] = React.useState(false);
 
   React.useEffect(() => {
-    if (model) markViewed(model);
-  }, [markViewed, model]);
+    setDetailModel(model);
+  }, [model]);
 
-  if (!model) {
+  React.useEffect(() => {
+    if (!detailModel) return;
+
+    // External cards may not include modelUrl until we fetch the provider's detail endpoint.
+    if (detailModel.source === 'local') return;
+    if (detailModel.modelUrl) return;
+
+    let cancelled = false;
+    async function loadExternalDetail() {
+      try {
+        setLoadingDetail(true);
+        const base = (import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/$/, '');
+        const resp = await fetch(`${base}/api/models/${encodeURIComponent(detailModel.id)}?format=card`, {
+          headers: { Accept: 'application/json' },
+        });
+        if (!resp.ok) return;
+        const payload = await resp.json();
+        if (cancelled) return;
+        if (payload && payload.id) {
+          setDetailModel(payload);
+          upsertModel(payload);
+        }
+      } catch {
+        // Ignore; keep the card info.
+      } finally {
+        if (!cancelled) setLoadingDetail(false);
+      }
+    }
+
+    loadExternalDetail();
+    return () => {
+      cancelled = true;
+    };
+  }, [detailModel, upsertModel]);
+
+  React.useEffect(() => {
+    if (detailModel) markViewed(detailModel);
+  }, [markViewed, detailModel]);
+
+  if (!detailModel) {
     return (
       <div className="page">
         <EmptyState
@@ -49,10 +90,10 @@ export default function ModelDetail() {
     );
   }
 
-  const inCart = cart.some((item) => item.id === model.id);
-  const saved = wishlist.some((item) => item.id === model.id);
+  const inCart = cart.some((item) => item.id === detailModel.id);
+  const saved = wishlist.some((item) => item.id === detailModel.id);
   const relatedModels = models
-    .filter((item) => item.category === model.category && item.id !== model.id)
+    .filter((item) => item.category === detailModel.category && item.id !== detailModel.id)
     .slice(0, 4);
 
   return (
@@ -65,21 +106,32 @@ export default function ModelDetail() {
       <div className="detail-shell">
         <section className="detail-viewer-column">
           <div className="model-3d-viewer-wrapper">
-            <React.Suspense
-              fallback={
-                <div className="viewer-loading-overlay" role="status">
-                  <div className="viewer-loading-inner">
-                    <div className="viewer-spinner" aria-hidden />
-                    <div className="viewer-loading-text">Preparing 3D viewer</div>
+            {detailModel.modelUrl ? (
+              <React.Suspense
+                fallback={
+                  <div className="viewer-loading-overlay" role="status">
+                    <div className="viewer-loading-inner">
+                      <div className="viewer-spinner" aria-hidden />
+                      <div className="viewer-loading-text">Preparing 3D viewer</div>
+                    </div>
+                  </div>
+                }
+              >
+                <Model3DViewer modelUrl={detailModel.modelUrl} model={detailModel} />
+              </React.Suspense>
+            ) : (
+              <div className="viewer-loading-overlay" role="status" aria-live="polite">
+                <div className="viewer-loading-inner">
+                  <div className="viewer-spinner" aria-hidden />
+                  <div className="viewer-loading-text">
+                    {loadingDetail ? 'Fetching external model files…' : '3D preview unavailable for this listing.'}
                   </div>
                 </div>
-              }
-            >
-              <Model3DViewer modelUrl={model.modelUrl} model={model} />
-            </React.Suspense>
+              </div>
+            )}
           </div>
           <div className="detail-thumbnail-row" aria-label="Preview images">
-            {[model.image, ...relatedModels.slice(0, 3).map((item) => item.image)].map((image, index) => (
+            {[detailModel.image, ...relatedModels.slice(0, 3).map((item) => item.image)].map((image, index) => (
               <button key={image} className={index === 0 ? 'active' : ''} type="button" aria-label={`Preview ${index + 1}`}>
                 <img src={image} alt="" />
               </button>
@@ -89,22 +141,22 @@ export default function ModelDetail() {
 
         <aside className="detail-purchase-panel">
           <div className="detail-category-row">
-            <span className="eyebrow">{model.category}</span>
-            {model.staffPick && <span className="quality-pill">Staff pick</span>}
+            <span className="eyebrow">{detailModel.category}</span>
+            {detailModel.staffPick && <span className="quality-pill">Staff pick</span>}
           </div>
 
-          <h1 className="model-detail-title">{model.name}</h1>
-          <p className="model-detail-summary">{model.description}</p>
+          <h1 className="model-detail-title">{detailModel.name}</h1>
+          <p className="model-detail-summary">{detailModel.description}</p>
 
           <Link
-            to={`/creator/${model.creator.replace(/\s+/g, '-').toLowerCase()}`}
+            to={`/creator/${detailModel.creator.replace(/\s+/g, '-').toLowerCase()}`}
             className="model-detail-creator"
           >
-            <span className="creator-avatar-small">{model.creator[0]}</span>
+            <span className="creator-avatar-small">{detailModel.creator[0]}</span>
             <span>
               <strong>
-                {model.creator}
-                {model.verified && <BadgeCheck size={15} />}
+                {detailModel.creator}
+                {detailModel.verified && <BadgeCheck size={15} />}
               </strong>
               <small>Verified creator support</small>
             </span>
@@ -112,20 +164,20 @@ export default function ModelDetail() {
 
           <div className="model-detail-stats">
             <span>
-              <Star size={16} fill="currentColor" /> {model.rating} ({model.reviews})
+              <Star size={16} fill="currentColor" /> {detailModel.rating ?? '—'} ({detailModel.reviews ?? 0})
             </span>
             <span>
-              <Eye size={16} /> {model.views}
+              <Eye size={16} /> {detailModel.views}
             </span>
             <span>
-              <Download size={16} /> {model.downloads.toLocaleString()}
+              <Download size={16} /> {(detailModel.downloads ?? 0).toLocaleString()}
             </span>
           </div>
 
           <div className="model-detail-price-section">
             <div>
               <span className="price-label">One-time license</span>
-              <strong className="model-detail-price">{model.price}</strong>
+              <strong className="model-detail-price">{detailModel.price}</strong>
             </div>
             <div className="delivery-note">
               <ShieldCheck size={15} />
@@ -134,11 +186,11 @@ export default function ModelDetail() {
           </div>
 
           <div className="detail-actions">
-            <button className="btn-add-to-cart" type="button" onClick={() => addToCart(model)} disabled={inCart}>
+            <button className="btn-add-to-cart" type="button" onClick={() => addToCart(detailModel)} disabled={inCart}>
               <ShoppingCart size={18} />
               {inCart ? 'In Cart' : 'Add to Cart'}
             </button>
-            <button className={`btn-secondary ${saved ? 'is-saved' : ''}`} type="button" onClick={() => toggleWishlist(model)}>
+            <button className={`btn-secondary ${saved ? 'is-saved' : ''}`} type="button" onClick={() => toggleWishlist(detailModel)}>
               <Heart size={18} fill={saved ? 'currentColor' : 'none'} />
               {saved ? 'Saved' : 'Save'}
             </button>
@@ -192,7 +244,7 @@ export default function ModelDetail() {
                   <Layers3 size={16} /> PBR material workflow
                 </span>
                 <span>
-                  <Tag size={16} /> {model.license}
+                  <Tag size={16} /> {detailModel.license}
                 </span>
               </div>
             </div>
@@ -202,27 +254,27 @@ export default function ModelDetail() {
             <div className="specs-grid enhanced">
               <div className="spec-item">
                 <span className="spec-label">Polygons</span>
-                <span className="spec-value">{model.polygons.toLocaleString()}</span>
+                <span className="spec-value">{detailModel.polygons.toLocaleString()}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Vertices</span>
-                <span className="spec-value">{model.vertices.toLocaleString()}</span>
+                <span className="spec-value">{detailModel.vertices.toLocaleString()}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Textures</span>
-                <span className="spec-value">{model.textures}</span>
+                <span className="spec-value">{detailModel.textures ?? '—'}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Formats</span>
-                <span className="spec-value">{model.formats}</span>
+                <span className="spec-value">{detailModel.formats ?? '—'}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Rigged</span>
-                <span className="spec-value">{model.rigged ? 'Yes' : 'No'}</span>
+                <span className="spec-value">{detailModel.rigged ? 'Yes' : 'No'}</span>
               </div>
               <div className="spec-item">
                 <span className="spec-label">Animated</span>
-                <span className="spec-value">{model.animated ? 'Yes' : 'No'}</span>
+                <span className="spec-value">{detailModel.animated ? 'Yes' : 'No'}</span>
               </div>
             </div>
           )}

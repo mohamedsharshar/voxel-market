@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    'polyhaven' => [
+        'base_url' => env('POLYHAVEN_BASE_URL', 'https://api.polyhaven.com'),
+        // PolyHaven requires a unique User-Agent per their API ToS.
+        'user_agent' => env('POLYHAVEN_USER_AGENT', 'VoxelMarket/1.0'),
+    ],
+
+    'github' => [
+        'base_url' => env('GITHUB_API_BASE_URL', 'https://api.github.com'),
+        // Optional: increases rate limits.
+        'token' => env('GITHUB_TOKEN'),
+        'user_agent' => env('GITHUB_USER_AGENT', 'VoxelMarket/1.0'),
+    ],
+
 ];

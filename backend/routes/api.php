@@ -72,6 +72,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     // Models CRUD (admin)
     Route::post('/models', [VoxelModelController::class, 'store']);
     Route::put('/models/{id}', [VoxelModelController::class, 'update']);
+    Route::post('/models/{id}/thumbnail', [VoxelModelController::class, 'uploadThumbnail']);
     Route::delete('/models/{id}', [VoxelModelController::class, 'destroy']);
 
     // Creators CRUD (admin)

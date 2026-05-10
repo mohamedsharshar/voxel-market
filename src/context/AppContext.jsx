@@ -54,6 +54,70 @@ export function AppProvider({ children }) {
   const [models, setModels] = React.useState(MODELS);
   const [creators, setCreators] = React.useState(CREATORS);
 
+  const API_BASE = React.useMemo(() => {
+    const raw = (import.meta.env.VITE_API_BASE_URL || '').trim();
+    return raw.endsWith('/') ? raw.slice(0, -1) : raw;
+  }, []);
+
+  const apiUrl = React.useCallback(
+    (path) => {
+      if (!path.startsWith('/')) return `${API_BASE}/${path}`;
+      return `${API_BASE}${path}`;
+    },
+    [API_BASE]
+  );
+
+  const upsertModel = React.useCallback((nextModel) => {
+    if (!nextModel?.id) return;
+    setModels((current) => {
+      const idx = current.findIndex((item) => String(item.id) === String(nextModel.id));
+      if (idx === -1) return [nextModel, ...current];
+      const copy = [...current];
+      copy[idx] = { ...copy[idx], ...nextModel };
+      return copy;
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (import.meta.env.MODE === 'test') return undefined;
+
+    const controller = new AbortController();
+
+    async function loadCatalog() {
+      try {
+        setGlobalLoading(true);
+
+        const [modelsResp, creatorsResp] = await Promise.all([
+          fetch(apiUrl('/api/models?format=card&source=all&limit=120'), {
+            signal: controller.signal,
+            headers: { Accept: 'application/json' },
+          }),
+          fetch(apiUrl('/api/creators'), {
+            signal: controller.signal,
+            headers: { Accept: 'application/json' },
+          }),
+        ]);
+
+        if (modelsResp.ok) {
+          const payload = await modelsResp.json();
+          if (Array.isArray(payload) && payload.length) setModels(payload);
+        }
+
+        if (creatorsResp.ok) {
+          const payload = await creatorsResp.json();
+          if (Array.isArray(payload) && payload.length) setCreators(payload);
+        }
+      } catch {
+        // Keep local sample data if API is unavailable.
+      } finally {
+        setGlobalLoading(false);
+      }
+    }
+
+    loadCatalog();
+    return () => controller.abort();
+  }, [apiUrl, setGlobalLoading]);
+
   React.useEffect(() => writeJson('voxel_cart', cart), [cart]);
   React.useEffect(() => writeJson('voxel_wishlist', wishlist), [wishlist]);
   React.useEffect(() => writeJson('voxel_recently_viewed', recentlyViewed), [recentlyViewed]);
@@ -202,6 +266,7 @@ export function AppProvider({ children }) {
       setGlobalLoading,
       models,
       setModels,
+      upsertModel,
       creators,
       setCreators,
     }),
@@ -218,6 +283,7 @@ export function AppProvider({ children }) {
       markNotificationsRead,
       markViewed,
       models,
+      upsertModel,
       notifications,
       recentlyViewed,
       removeFromCart,

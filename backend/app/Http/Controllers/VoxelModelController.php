@@ -3,15 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\VoxelModel;
+use App\Services\ExternalModels\ExternalModelCatalog;
+use App\Support\ModelCardFormatter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class VoxelModelController extends Controller
 {
     /**
      * Display a listing of all models.
      */
-    public function index(Request $request)
+    public function index(Request $request, ExternalModelCatalog $catalog)
     {
+        $format = $request->get('format');
+        $source = $request->get('source', 'local');
+
         $query = VoxelModel::with('creator');
 
         // Filter by category
@@ -45,15 +52,55 @@ class VoxelModelController extends Controller
             $query->orderBy($sortBy, $sortDir);
         }
 
-        return response()->json($query->get());
+        // Default behavior (backwards compatible): return raw local DB models.
+        if ($format !== 'card' && ($source === null || $source === '' || $source === 'local')) {
+            return response()->json($query->get());
+        }
+
+        $localCards = ($source === null || $source === '' || $source === 'local' || $source === 'all')
+            ? $query->get()->map(fn (VoxelModel $model) => ModelCardFormatter::fromVoxelModel($model))->values()->all()
+            : [];
+
+        if ($source === null || $source === '' || $source === 'local') {
+            return response()->json($localCards);
+        }
+
+        $filters = [
+            // Prefer q, fallback to search.
+            'q' => (string) ($request->get('q') ?? $request->get('search') ?? ''),
+            'limit' => (int) ($request->get('limit') ?? 60),
+        ];
+
+        $externalCards = $catalog->list((string) $source, $filters);
+
+        if ($source === 'all') {
+            return response()->json(array_values(array_merge($localCards, $externalCards)));
+        }
+
+        return response()->json($externalCards);
     }
 
     /**
      * Display a specific model.
      */
-    public function show($id)
+    public function show(Request $request, ExternalModelCatalog $catalog, $id)
     {
+        // External model IDs look like: "source:externalId".
+        if (!is_numeric($id) && is_string($id) && Str::contains($id, ':')) {
+            [$source, $externalId] = explode(':', $id, 2);
+            $external = $catalog->get((string) $source, (string) $externalId);
+            if (!$external) {
+                abort(404);
+            }
+
+            return response()->json(ModelCardFormatter::fromExternal($external));
+        }
+
         $model = VoxelModel::with('creator')->findOrFail($id);
+
+        if ($request->get('format') === 'card') {
+            return response()->json(ModelCardFormatter::fromVoxelModel($model));
+        }
 
         return response()->json($model);
     }
@@ -123,6 +170,26 @@ class VoxelModelController extends Controller
         $model->delete();
 
         return response()->json(['message' => 'Model deleted successfully.']);
+    }
+
+    /**
+     * Upload/replace thumbnail image for a local model (admin only).
+     */
+    public function uploadThumbnail(Request $request, $id)
+    {
+        $model = VoxelModel::findOrFail($id);
+
+        $validated = $request->validate([
+            'image' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ]);
+
+        $file = $validated['image'];
+
+        $path = Storage::disk('public')->putFile('model-thumbs', $file);
+        $model->image = '/storage/' . ltrim($path, '/');
+        $model->save();
+
+        return response()->json(ModelCardFormatter::fromVoxelModel($model->load('creator')));
     }
 
     /**
