@@ -140,7 +140,7 @@ export default function Settings() {
                   <Save size={17} /> Update Password
                 </button>
               </form>
-            </>
+            </motion.div>
           )}
 
           {activeTab === 'notifications' && (
