@@ -1,6 +1,8 @@
 import React from 'react';
 import { Mail, MapPin, MessageCircle, Send } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Contact() {
   const { showToast } = useApp();
@@ -12,12 +14,15 @@ export default function Contact() {
   };
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <Mail size={15} /> Contact
       </div>
       <section className="contact-layout">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
           <h1>Talk to the marketplace team.</h1>
           <p>
             Use this page for partnerships, creator onboarding, enterprise purchasing, or marketplace
@@ -46,8 +51,14 @@ export default function Contact() {
               </span>
             </span>
           </div>
-        </div>
-        <form className="panel form-grid single" onSubmit={submit}>
+        </motion.div>
+        <motion.form 
+          className="panel form-grid single" 
+          onSubmit={submit}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <label>
             Name
             <input required placeholder="Your name" />
@@ -72,8 +83,9 @@ export default function Contact() {
           <button className="btn-primary" type="submit">
             <Send size={17} /> Send Message
           </button>
-        </form>
+          </button>
+        </motion.form>
       </section>
-    </div>
+    </PageTransition>
   );
 }

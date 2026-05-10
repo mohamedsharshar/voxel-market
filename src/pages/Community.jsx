@@ -2,12 +2,14 @@ import React from 'react';
 import { Heart, Sparkles, Star } from 'lucide-react';
 import { COMMUNITY_POSTS } from '../data';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Community() {
   const { showToast } = useApp();
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <Sparkles size={15} /> Community Showcase
       </div>
@@ -20,9 +22,21 @@ export default function Community() {
         </div>
       </div>
 
-      <div className="community-grid large">
+      <motion.div 
+        className="community-grid large"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+        }}
+      >
         {COMMUNITY_POSTS.map((post) => (
-          <article className="community-card" key={post.id}>
+          <motion.article 
+            className="community-card" 
+            key={post.id}
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+          >
             <img src={post.image} alt={post.title} />
             <div>
               <span>
@@ -36,9 +50,9 @@ export default function Community() {
                 <Heart size={15} /> Save showcase
               </button>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </PageTransition>
   );
 }

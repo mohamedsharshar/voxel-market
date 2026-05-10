@@ -4,6 +4,8 @@ import CreatorCard from '../components/CreatorCard';
 import EmptyState from '../components/EmptyState';
 import SectionHeader from '../components/SectionHeader';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Creators() {
   const { creators } = useApp();
@@ -21,7 +23,7 @@ export default function Creators() {
   });
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <Users size={15} /> Creator directory
       </div>
@@ -69,12 +71,22 @@ export default function Creators() {
           message="Try a broader specialty, handle, or creator name."
         />
       ) : (
-        <div className="creators-grid">
+        <motion.div 
+          className="creators-grid"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+          }}
+        >
           {filtered.map((creator) => (
-            <CreatorCard key={creator.id} creator={creator} />
+            <motion.div key={creator.id} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+              <CreatorCard creator={creator} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
-    </div>
+    </PageTransition>
   );
 }

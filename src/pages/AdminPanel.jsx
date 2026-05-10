@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Navigate } from 'react-router-dom';
 import { Users, Box, DollarSign, Activity, ShoppingCart, ArrowUpRight, ArrowDownRight, Edit, Trash2, Plus, X, Save } from 'lucide-react';
+import PageTransition from '../components/PageTransition';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminPanel() {
   const { user, models, setModels, creators, setCreators, showToast } = useApp();
@@ -57,7 +59,11 @@ export default function AdminPanel() {
   };
 
   const StatCard = ({ title, value, change, isPositive, icon: Icon, color }) => (
-    <div style={{ background: 'var(--bg-card)', padding: '1.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <motion.div 
+      style={{ background: 'var(--bg-card)', padding: '1.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1rem' }}
+      whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}
+      transition={{ duration: 0.2 }}
+    >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{title}</p>
@@ -74,11 +80,11 @@ export default function AdminPanel() {
         </span>
         <span style={{ color: 'var(--text-secondary)' }}>vs last month</span>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
-    <div className="page-container" style={{ background: 'var(--bg-primary)', display: 'flex', gap: '2rem', maxWidth: '1400px', margin: '0 auto', padding: '2rem 1rem' }}>
+    <PageTransition className="page-container" style={{ background: 'var(--bg-primary)', display: 'flex', gap: '2rem', maxWidth: '1400px', margin: '0 auto', padding: '2rem 1rem' }}>
       
       {/* Admin Sidebar */}
       <div style={{ flex: '0 0 250px', background: 'var(--bg-card)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', height: 'fit-content' }}>
@@ -107,10 +113,16 @@ export default function AdminPanel() {
 
       {/* Main Content Area */}
       <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0 }}>
-        
+        <AnimatePresence mode="wait">
         {/* DASHBOARD TAB */}
         {activeTab === 'dashboard' && (
-          <>
+          <motion.div
+            key="dashboard"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem' }}>
               <div>
                 <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Dashboard Overview</h1>
@@ -170,12 +182,19 @@ export default function AdminPanel() {
                 </div>
               </div>
             </div>
-          </>
+          </motion.div>
         )}
 
         {/* MODELS TAB */}
         {activeTab === 'models' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <motion.div 
+            key="models"
+            style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h1 style={{ fontSize: '2rem' }}>Manage Models</h1>
               <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => { setCurrentModel({ title: '', price: 0, creator: '', category: 'Characters', formats: ['FBX'] }); setIsModelModalOpen(true); }}>
@@ -220,7 +239,14 @@ export default function AdminPanel() {
 
         {/* CREATORS TAB */}
         {activeTab === 'creators' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <motion.div 
+            key="creators"
+            style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h1 style={{ fontSize: '2rem' }}>Manage Creators</h1>
               <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => { setCurrentCreator({ name: '', handle: '', rating: 5, modelsCount: 0 }); setIsCreatorModalOpen(true); }}>
@@ -341,6 +367,6 @@ export default function AdminPanel() {
         </div>
       )}
 
-    </div>
+    </PageTransition>
   );
 }

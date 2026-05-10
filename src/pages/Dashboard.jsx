@@ -14,13 +14,15 @@ import {
 } from 'lucide-react';
 import UploadDropzone from '../components/UploadDropzone';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Dashboard() {
   const { models, user } = useApp();
   const ownedModels = models.slice(0, 5);
 
   return (
-    <div className="page dashboard-page">
+    <PageTransition className="page dashboard-page">
       <div className="dashboard-header">
         <div>
           <div className="page-kicker">
@@ -34,7 +36,11 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <section className="dashboard-metrics">
+      <motion.section 
+        className="dashboard-metrics"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <div className="metric-card">
           <DollarSign size={20} />
           <strong>$24,592</strong>
@@ -67,10 +73,15 @@ export default function Dashboard() {
             <Activity size={13} /> stable
           </small>
         </div>
-      </section>
+      </motion.section>
 
       <div className="dashboard-grid">
-        <section className="panel">
+        <motion.section 
+          className="panel"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <div className="panel-heading">
             <h2>Upload Management</h2>
             <UploadCloud size={18} />
@@ -87,9 +98,14 @@ export default function Dashboard() {
               <PackageCheck size={15} /> Review target: 24 hours
             </span>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="panel">
+        <motion.section 
+          className="panel"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <div className="panel-heading">
             <h2>Revenue Overview</h2>
             <BarChart3 size={18} />
@@ -99,10 +115,15 @@ export default function Dashboard() {
               <span key={index} style={{ '--bar-height': `${height}px` }} />
             ))}
           </div>
-        </section>
+        </motion.section>
       </div>
 
-      <section className="panel">
+      <motion.section 
+        className="panel"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
         <div className="panel-heading">
           <h2>Listing Health</h2>
           <Activity size={18} />
@@ -126,7 +147,7 @@ export default function Dashboard() {
             </div>
           ))}
         </div>
-      </section>
-    </div>
+      </motion.section>
+    </PageTransition>
   );
 }

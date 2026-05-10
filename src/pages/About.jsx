@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BadgeCheck, Globe2, ShieldCheck, Target, Users, Zap } from 'lucide-react';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function About() {
   return (
-    <div className="page">
-      <section className="about-hero">
+    <PageTransition className="page">
+      <motion.section 
+        className="about-hero"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <div className="page-kicker">
           <Globe2 size={15} /> About Voxel Market
         </div>
@@ -14,9 +20,15 @@ export default function About() {
           Voxel Market brings real-time previewing, technical filters, creator trust, and purchase
           workflows into one focused platform for developers, artists, and production teams.
         </p>
-      </section>
+        </p>
+      </motion.section>
 
-      <section className="insight-band">
+      <motion.section 
+        className="insight-band"
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+      >
         <div className="insight-item">
           <Target size={22} />
           <strong>Reduce buyer uncertainty</strong>
@@ -32,23 +44,38 @@ export default function About() {
           <strong>Keep workflows fast</strong>
           <span>Search, quick view, wishlist, history, and recommendations reduce unnecessary navigation steps.</span>
         </div>
-      </section>
+        </div>
+      </motion.section>
 
-      <section className="about-values">
+      <motion.section 
+        className="about-values"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+        }}
+      >
         {[
           ['Creator-first economics', Users, 'Tools for storefronts, uploads, asset health, and predictable support.'],
           ['Production metadata', BadgeCheck, 'Structured fields that help technical buyers compare assets quickly.'],
           ['Immersive inspection', Globe2, 'Interactive 3D preview controls that support real evaluation, not just browsing.'],
         ].map(([title, Icon, body]) => (
-          <article className="panel" key={title}>
+          <motion.article className="panel" key={title} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
             <Icon size={26} />
             <h2>{title}</h2>
             <p>{body}</p>
-          </article>
+          </motion.article>
         ))}
-      </section>
+      </motion.section>
 
-      <section className="creator-cta">
+      <motion.section 
+        className="creator-cta"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
         <div>
           <div className="eyebrow">Next step</div>
           <h2>Explore the marketplace experience.</h2>
@@ -62,7 +89,8 @@ export default function About() {
             Creator Dashboard
           </Link>
         </div>
-      </section>
-    </div>
+        </div>
+      </motion.section>
+    </PageTransition>
   );
 }

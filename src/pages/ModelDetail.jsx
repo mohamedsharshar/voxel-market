@@ -18,6 +18,8 @@ import EmptyState from '../components/EmptyState';
 import ModelCard from '../components/ModelCard';
 import SectionHeader from '../components/SectionHeader';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 const tabs = ['Overview', 'Technical', 'License', 'Reviews'];
 const Model3DViewer = React.lazy(() => import('../components/Model3DViewer'));
@@ -97,14 +99,19 @@ export default function ModelDetail() {
     .slice(0, 4);
 
   return (
-    <div className="page detail-page">
+    <PageTransition className="page detail-page">
       <button className="back-button" type="button" onClick={() => navigate(-1)}>
         <ChevronLeft size={18} />
         Back
       </button>
 
       <div className="detail-shell">
-        <section className="detail-viewer-column">
+        <motion.section 
+          className="detail-viewer-column"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
           <div className="model-3d-viewer-wrapper">
             {detailModel.modelUrl ? (
               <React.Suspense
@@ -137,9 +144,14 @@ export default function ModelDetail() {
               </button>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <aside className="detail-purchase-panel">
+        <motion.aside 
+          className="detail-purchase-panel"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <div className="detail-category-row">
             <span className="eyebrow">{detailModel.category}</span>
             {detailModel.staffPick && <span className="quality-pill">Staff pick</span>}
@@ -207,10 +219,15 @@ export default function ModelDetail() {
               <ShieldCheck size={15} /> Refund review
             </span>
           </div>
-        </aside>
+        </motion.aside>
       </div>
 
-      <section className="detail-tabs-section">
+      <motion.section 
+        className="detail-tabs-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
         <div className="tabs" role="tablist" aria-label="Model details">
           {tabs.map((tab) => (
             <button
@@ -324,10 +341,15 @@ export default function ModelDetail() {
             </div>
           )}
         </div>
-      </section>
+      </motion.section>
 
       {relatedModels.length > 0 && (
-        <section className="related-section">
+        <motion.section 
+          className="related-section"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <SectionHeader
             eyebrow="Related"
             title="More From This Category"
@@ -338,8 +360,8 @@ export default function ModelDetail() {
               <ModelCard key={item.id} model={item} />
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
-    </div>
+    </PageTransition>
   );
 }

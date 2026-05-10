@@ -19,6 +19,8 @@ import ModelCard from '../components/ModelCard';
 import SectionHeader from '../components/SectionHeader';
 import { CATEGORIES, COLLECTIONS, COMMUNITY_POSTS, TRENDING_SEARCHES } from '../data';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <PageTransition className="">
       <section className="hero">
         <div className="hero-city" />
         <div className="hero-bg" />
@@ -94,7 +96,13 @@ export default function Home() {
       </section>
 
       <div className="page home-page">
-        <section className="category-strip" aria-label="Browse categories">
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="category-strip" 
+          aria-label="Browse categories"
+        >
           {CATEGORIES.map((category) => (
             <Link key={category.name} to={`/browse?category=${encodeURIComponent(category.name)}`}>
               <span>{category.name}</span>
@@ -102,9 +110,13 @@ export default function Home() {
               <ChevronRight size={16} />
             </Link>
           ))}
-        </section>
+        </motion.section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             eyebrow="Live marketplace"
             title="Trending Now"
@@ -117,9 +129,14 @@ export default function Home() {
               <ModelCard key={model.id} model={model} />
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="insight-band">
+        <motion.section 
+          className="insight-band"
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+        >
           <div className="insight-item">
             <Layers3 size={22} />
             <strong>Technical metadata first</strong>
@@ -135,9 +152,13 @@ export default function Home() {
             <strong>Production handoff</strong>
             <span>Purchase history, download history, saved collections, and creator support keep teams moving.</span>
           </div>
-        </section>
+        </motion.section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             eyebrow="Curated"
             title="Featured Models"
@@ -150,9 +171,13 @@ export default function Home() {
               <ModelCard key={model.id} model={model} />
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             eyebrow="Collections"
             title="Build Faster With Curated Packs"
@@ -173,9 +198,13 @@ export default function Home() {
               </Link>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             eyebrow="Creators"
             title="Top Sellers"
@@ -188,9 +217,13 @@ export default function Home() {
               <CreatorCard key={creator.id} creator={creator} />
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             eyebrow="Community"
             title="Showcase"
@@ -214,9 +247,14 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="creator-cta">
+        <motion.section 
+          className="creator-cta"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <div>
             <div className="eyebrow">
               <Users size={14} /> Creator tools
@@ -235,9 +273,15 @@ export default function Home() {
               See Top Sellers
             </Link>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="trust-row" aria-label="Platform trust indicators">
+        <motion.section 
+          className="trust-row" 
+          aria-label="Platform trust indicators"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <span>
             <BadgeCheck size={16} /> Verified creators
           </span>
@@ -247,8 +291,8 @@ export default function Home() {
           <span>
             <ShieldCheck size={16} /> Commercial licensing
           </span>
-        </section>
+        </motion.section>
       </div>
-    </>
+    </PageTransition>
   );
 }

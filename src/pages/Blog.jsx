@@ -2,10 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Clock } from 'lucide-react';
 import { ARTICLES } from '../data';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Blog() {
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <BookOpen size={15} /> Articles
       </div>
@@ -18,9 +20,18 @@ export default function Blog() {
         </div>
       </div>
 
-      <div className="article-grid">
+      <motion.div 
+        className="article-grid"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+        }}
+      >
         {ARTICLES.map((article) => (
-          <Link className="article-card" key={article.id} to="/blog">
+          <motion.div key={article.id} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+            <Link className="article-card" to="/blog">
             <img src={article.image} alt="" />
             <div>
               <span>
@@ -30,9 +41,9 @@ export default function Blog() {
               <strong>{article.title}</strong>
               <p>{article.excerpt}</p>
             </div>
-          </Link>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </PageTransition>
   );
 }

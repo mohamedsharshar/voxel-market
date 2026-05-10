@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, BadgeCheck, ShieldCheck, ShoppingCart, Trash2 } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Cart() {
   const { cart, clearCart, removeFromCart, showToast } = useApp();
@@ -14,7 +16,7 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <div className="page">
+      <PageTransition className="page">
         <EmptyState
           icon={ShoppingCart}
           title="Your cart is empty"
@@ -25,12 +27,12 @@ export default function Cart() {
             </button>
           }
         />
-      </div>
+      </PageTransition>
     );
   }
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="cart-header">
         <div>
           <div className="page-kicker">Checkout preparation</div>
@@ -51,10 +53,27 @@ export default function Cart() {
       </div>
 
       <div className="cart-layout">
-        <section className="cart-items" aria-label="Cart items">
-          {cart.map((item) => (
-            <article key={item.id} className="cart-item">
-              <Link to={`/model/${item.id}`} className="cart-item-image">
+        <motion.section 
+          className="cart-items" 
+          aria-label="Cart items"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+          }}
+        >
+          <AnimatePresence>
+            {cart.map((item) => (
+              <motion.article 
+                key={item.id} 
+                className="cart-item"
+                layout
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+              >
+                <Link to={`/model/${item.id}`} className="cart-item-image">
                 <img src={item.image} alt={item.name} />
               </Link>
 
@@ -82,12 +101,18 @@ export default function Cart() {
                 aria-label={`Remove ${item.name} from cart`}
               >
                 <Trash2 size={18} />
-              </button>
-            </article>
-          ))}
-        </section>
+                </button>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.section>
 
-        <aside className="cart-summary">
+        <motion.aside 
+          className="cart-summary"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <h2>Order Summary</h2>
           <div className="summary-row">
             <span>Subtotal</span>
@@ -112,8 +137,8 @@ export default function Cart() {
             <ShieldCheck size={16} />
             Secure checkout, instant downloads, and invoice history.
           </div>
-        </aside>
+        </motion.aside>
       </div>
-    </div>
+    </PageTransition>
   );
 }

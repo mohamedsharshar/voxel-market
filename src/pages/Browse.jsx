@@ -16,6 +16,8 @@ import ModelCard from '../components/ModelCard';
 import SkeletonGrid from '../components/SkeletonGrid';
 import { CATEGORIES, TRENDING_SEARCHES } from '../data';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FILE_TYPES = ['GLB', 'FBX', 'OBJ', 'BLEND', 'USDZ'];
 const SORT_OPTIONS = [
@@ -258,7 +260,7 @@ export default function Browse() {
   );
 
   return (
-    <div className="page browse-page">
+    <PageTransition className="page browse-page">
       <div className="page-kicker">
         <Sparkles size={15} /> Marketplace discovery
       </div>
@@ -357,41 +359,75 @@ export default function Browse() {
           {loading ? (
             <SkeletonGrid count={6} />
           ) : filtered.length === 0 ? (
-            <EmptyState
-              title="No models match those filters"
-              message="Try widening the price range, clearing a category, or searching a related term."
-              action={
-                <button className="btn-primary" type="button" onClick={resetFilters}>
-                  Reset filters
-                </button>
-              }
-            />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <EmptyState
+                title="No models match those filters"
+                message="Try widening the price range, clearing a category, or searching a related term."
+                action={
+                  <button className="btn-primary" type="button" onClick={resetFilters}>
+                    Reset filters
+                  </button>
+                }
+              />
+            </motion.div>
           ) : (
-            <div className="models-grid">
+            <motion.div 
+              className="models-grid"
+              initial="hidden"
+              animate="show"
+              variants={{
+                hidden: { opacity: 0 },
+                show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+              }}
+            >
               {filtered.map((model) => (
-                <ModelCard key={model.id} model={model} />
+                <motion.div key={model.id} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+                  <ModelCard model={model} />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </section>
       </div>
 
       {mobileFiltersOpen && (
-        <div className="mobile-filter-drawer" role="dialog" aria-modal="true" aria-label="Filters">
-          <div className="drawer-backdrop" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="drawer-panel">
-            <button
-              className="modal-close"
-              type="button"
-              onClick={() => setMobileFiltersOpen(false)}
-              aria-label="Close filters"
+        <AnimatePresence>
+          <motion.div 
+            className="mobile-filter-drawer" 
+            role="dialog" 
+            aria-modal="true" 
+            aria-label="Filters"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div 
+              className="drawer-backdrop" 
+              onClick={() => setMobileFiltersOpen(false)} 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            <motion.div 
+              className="drawer-panel"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", bounce: 0, duration: 0.4 }}
             >
-              <X size={18} />
-            </button>
-            {filters}
-          </div>
-        </div>
+              <button
+                className="modal-close"
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                aria-label="Close filters"
+              >
+                <X size={18} />
+              </button>
+              {filters}
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
       )}
-    </div>
+    </PageTransition>
   );
 }

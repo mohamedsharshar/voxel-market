@@ -4,13 +4,15 @@ import { Bell, Download, Heart, History, PackageCheck, Star, User } from 'lucide
 import EmptyState from '../components/EmptyState';
 import ModelCard from '../components/ModelCard';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Profile() {
   const { notifications, recentlyViewed, user, wishlist } = useApp();
 
   if (!user) {
     return (
-      <div className="page">
+      <PageTransition className="page">
         <EmptyState
           icon={User}
           title="Sign in to view your profile"
@@ -21,15 +23,19 @@ export default function Profile() {
             </Link>
           }
         />
-      </div>
+      </PageTransition>
     );
   }
 
   const downloads = recentlyViewed.slice(0, 3);
 
   return (
-    <div className="page">
-      <section className="profile-hero">
+    <PageTransition className="page">
+      <motion.section 
+        className="profile-hero"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <div className="profile-avatar">{user.name?.[0]?.toUpperCase() || 'U'}</div>
         <div>
           <div className="page-kicker">Buyer workspace</div>
@@ -39,9 +45,14 @@ export default function Profile() {
         <Link className="btn-secondary" to="/settings">
           Edit Profile
         </Link>
-      </section>
+      </motion.section>
 
-      <section className="dashboard-metrics">
+      <motion.section 
+        className="dashboard-metrics"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <div className="metric-card">
           <Heart size={20} />
           <strong>{wishlist.length}</strong>
@@ -62,10 +73,15 @@ export default function Profile() {
           <strong>{notifications.length}</strong>
           <span>Notifications</span>
         </div>
-      </section>
+      </motion.section>
 
       <div className="profile-grid">
-        <section className="panel">
+        <motion.section 
+          className="panel"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <div className="panel-heading">
             <h2>Download History</h2>
             <PackageCheck size={18} />
@@ -86,9 +102,14 @@ export default function Profile() {
               ))}
             </div>
           )}
-        </section>
+        </motion.section>
 
-        <section className="panel">
+        <motion.section 
+          className="panel"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <div className="panel-heading">
             <h2>Reviews & Ratings</h2>
             <Star size={18} />
@@ -104,10 +125,14 @@ export default function Profile() {
             <strong>Ready to review your next purchase</strong>
             <p>Review prompts appear after checkout so creators receive structured feedback.</p>
           </div>
-        </section>
+        </motion.section>
       </div>
 
-      <section>
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
         <div className="section-header">
           <div>
             <div className="eyebrow">Saved</div>
@@ -130,7 +155,7 @@ export default function Profile() {
             ))}
           </div>
         )}
-      </section>
-    </div>
+      </motion.section>
+    </PageTransition>
   );
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, Palette, Save, Shield, User } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const tabs = [
   { id: 'profile', label: 'Profile', icon: User },
@@ -50,7 +52,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">Account</div>
       <div className="settings-layout">
         <aside className="settings-sidebar">
@@ -76,8 +78,15 @@ export default function Settings() {
         </aside>
 
         <section className="settings-panel panel">
+          <AnimatePresence mode="wait">
           {activeTab === 'profile' && (
-            <>
+            <motion.div
+              key="profile"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
               <div className="panel-heading">
                 <h1>Profile Information</h1>
                 <User size={20} />
@@ -95,11 +104,17 @@ export default function Settings() {
                   <Save size={17} /> Save Changes
                 </button>
               </form>
-            </>
+            </motion.div>
           )}
 
           {activeTab === 'security' && (
-            <>
+            <motion.div
+              key="security"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
               <div className="panel-heading">
                 <h1>Security</h1>
                 <Shield size={20} />
@@ -129,7 +144,13 @@ export default function Settings() {
           )}
 
           {activeTab === 'notifications' && (
-            <>
+            <motion.div
+              key="notifications"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
               <div className="panel-heading">
                 <h1>Notifications</h1>
                 <Bell size={20} />
@@ -149,11 +170,17 @@ export default function Settings() {
                   </label>
                 ))}
               </div>
-            </>
+            </motion.div>
           )}
 
           {activeTab === 'appearance' && (
-            <>
+            <motion.div
+              key="appearance"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
               <div className="panel-heading">
                 <h1>Appearance</h1>
                 <Palette size={20} />
@@ -170,10 +197,11 @@ export default function Settings() {
                   <small>Coming soon</small>
                 </button>
               </div>
-            </>
+            </motion.div>
           )}
+          </AnimatePresence>
         </section>
       </div>
-    </div>
+    </PageTransition>
   );
 }

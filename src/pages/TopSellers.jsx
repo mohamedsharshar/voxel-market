@@ -3,13 +3,15 @@ import { Award, BadgeCheck, Box, DollarSign, Star, TrendingUp } from 'lucide-rea
 import CreatorCard from '../components/CreatorCard';
 import SectionHeader from '../components/SectionHeader';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function TopSellers() {
   const { creators } = useApp();
   const ranked = React.useMemo(() => [...creators].sort((a, b) => b.sales - a.sales), [creators]);
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <Award size={15} /> Creator economy
       </div>
@@ -18,9 +20,21 @@ export default function TopSellers() {
         description="Creators with the strongest buyer trust, sales consistency, and review quality."
       />
 
-      <section className="seller-leaderboard">
+      <motion.section 
+        className="seller-leaderboard"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+        }}
+      >
         {ranked.slice(0, 3).map((creator, index) => (
-          <article className="leaderboard-card" key={creator.id}>
+          <motion.article 
+            className="leaderboard-card" 
+            key={creator.id}
+            variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}
+          >
             <span className="leaderboard-rank">#{index + 1}</span>
             <img src={creator.avatar} alt={creator.name} />
             <div>
@@ -41,9 +55,9 @@ export default function TopSellers() {
                 <TrendingUp size={14} /> {creator.followers}
               </span>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </section>
+      </motion.section>
 
       <div className="creator-directory-meta">
         <span>
@@ -54,11 +68,21 @@ export default function TopSellers() {
         </span>
       </div>
 
-      <div className="creators-grid">
+      <motion.div 
+        className="creators-grid"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.05, delayChildren: 0.3 } }
+        }}
+      >
         {ranked.map((creator) => (
-          <CreatorCard key={creator.id} creator={creator} />
+          <motion.div key={creator.id} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+            <CreatorCard creator={creator} />
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </PageTransition>
   );
 }

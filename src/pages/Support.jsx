@@ -1,7 +1,8 @@
 import React from 'react';
 import { LifeBuoy, Mail, MessageCircle, Search, Send, ShieldCheck } from 'lucide-react';
-import { SUPPORT_TOPICS } from '../data';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Support() {
   const { showToast } = useApp();
@@ -15,8 +16,12 @@ export default function Support() {
   };
 
   return (
-    <div className="page">
-      <section className="support-hero">
+    <PageTransition className="page">
+      <motion.section 
+        className="support-hero"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <div>
           <div className="page-kicker">
             <LifeBuoy size={15} /> Support Center
@@ -36,10 +41,15 @@ export default function Support() {
             placeholder="Search licensing, invoices, uploads..."
           />
         </div>
-      </section>
+      </motion.section>
 
       <div className="support-layout">
-        <section className="panel">
+        <motion.section 
+          className="panel"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <div className="panel-heading">
             <h2>Popular Topics</h2>
             <ShieldCheck size={18} />
@@ -51,9 +61,14 @@ export default function Support() {
               </button>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="panel">
+        <motion.section 
+          className="panel"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <div className="panel-heading">
             <h2>Contact Options</h2>
             <MessageCircle size={18} />
@@ -74,9 +89,14 @@ export default function Support() {
               </span>
             </button>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="panel support-form-panel">
+        <motion.section 
+          className="panel support-form-panel"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <div className="panel-heading">
             <h2>Send a Request</h2>
             <Send size={18} />
@@ -102,8 +122,8 @@ export default function Support() {
               <Send size={17} /> Send Request
             </button>
           </form>
-        </section>
+        </motion.section>
       </div>
-    </div>
+    </PageTransition>
   );
 }

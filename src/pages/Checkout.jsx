@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, CreditCard, Download, Lock, PackageCheck, ShieldCheck } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function Checkout() {
   const { cart, clearCart, showToast } = useApp();
@@ -20,8 +22,13 @@ export default function Checkout() {
 
   if (complete) {
     return (
-      <div className="page">
-        <section className="checkout-success">
+      <PageTransition className="page">
+        <motion.section 
+          className="checkout-success"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", bounce: 0.5 }}
+        >
           <CheckCircle2 size={58} />
           <h1>Purchase Complete</h1>
           <p>Your assets are ready in download history and purchase records.</p>
@@ -33,14 +40,14 @@ export default function Checkout() {
               Continue Browsing
             </Link>
           </div>
-        </section>
-      </div>
+        </motion.section>
+      </PageTransition>
     );
   }
 
   if (cart.length === 0) {
     return (
-      <div className="page">
+      <PageTransition className="page">
         <EmptyState
           icon={CreditCard}
           title="No items to checkout"
@@ -51,17 +58,23 @@ export default function Checkout() {
             </button>
           }
         />
-      </div>
+      </PageTransition>
     );
   }
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <Lock size={15} /> Secure checkout
       </div>
       <div className="checkout-layout">
-        <form className="checkout-form panel" onSubmit={handleSubmit}>
+        <motion.form 
+          className="checkout-form panel" 
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <div className="panel-heading">
             <h1>Checkout</h1>
             <ShieldCheck size={20} />
@@ -109,9 +122,14 @@ export default function Checkout() {
             Complete Purchase
             <Download size={18} />
           </button>
-        </form>
+        </motion.form>
 
-        <aside className="cart-summary checkout-summary">
+        <motion.aside 
+          className="cart-summary checkout-summary"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
           <h2>Assets</h2>
           <div className="compact-list">
             {cart.map((item) => (
@@ -138,8 +156,8 @@ export default function Checkout() {
             <PackageCheck size={16} />
             Assets are attached to purchase history after checkout.
           </div>
-        </aside>
+        </motion.aside>
       </div>
-    </div>
+    </PageTransition>
   );
 }

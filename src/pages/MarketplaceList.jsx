@@ -5,6 +5,8 @@ import EmptyState from '../components/EmptyState';
 import ModelCard from '../components/ModelCard';
 import SectionHeader from '../components/SectionHeader';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 const configs = {
   trending: {
@@ -59,7 +61,7 @@ export default function MarketplaceList({ type }) {
   }, [models, recentlyViewed, type, wishlist]);
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <div className="page-kicker">
         <Icon size={15} /> {config.eyebrow}
       </div>
@@ -77,12 +79,22 @@ export default function MarketplaceList({ type }) {
           }
         />
       ) : (
-        <div className="models-grid">
+        <motion.div 
+          className="models-grid"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+          }}
+        >
           {items.map((model) => (
-            <ModelCard key={model.id} model={model} />
+            <motion.div key={model.id} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
+              <ModelCard model={model} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
-    </div>
+    </PageTransition>
   );
 }

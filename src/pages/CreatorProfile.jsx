@@ -16,6 +16,8 @@ import EmptyState from '../components/EmptyState';
 import ModelCard from '../components/ModelCard';
 import SectionHeader from '../components/SectionHeader';
 import { useApp } from '../context/AppContext';
+import PageTransition from '../components/PageTransition';
+import { motion } from 'framer-motion';
 
 export default function CreatorProfile() {
   const { name } = useParams();
@@ -25,7 +27,7 @@ export default function CreatorProfile() {
 
   if (!creator) {
     return (
-      <div className="page">
+      <PageTransition className="page">
         <EmptyState
           icon={Users}
           title="Creator not found"
@@ -36,7 +38,7 @@ export default function CreatorProfile() {
             </button>
           }
         />
-      </div>
+      </PageTransition>
     );
   }
 
@@ -44,13 +46,17 @@ export default function CreatorProfile() {
   const followed = followedCreators.includes(creator.name);
 
   return (
-    <div className="page">
+    <PageTransition className="page">
       <button className="back-button" type="button" onClick={() => navigate(-1)}>
         <ChevronLeft size={18} />
         Back
       </button>
 
-      <section className="creator-profile-header">
+      <motion.section 
+        className="creator-profile-header"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <img className="creator-profile-banner" src={creator.banner} alt="" />
         <div className="creator-profile-content-row">
           <div className="creator-profile-avatar">
@@ -95,9 +101,14 @@ export default function CreatorProfile() {
             {followed ? 'Following' : 'Follow'}
           </button>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="creator-profile-stats">
+      <motion.section 
+        className="creator-profile-stats"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <div className="profile-stat">
           <Box size={19} />
           <span>
@@ -126,9 +137,13 @@ export default function CreatorProfile() {
             Followers
           </span>
         </div>
-      </section>
+      </motion.section>
 
-      <section>
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
         <SectionHeader
           eyebrow={creator.specialty}
           title={`Published Models (${creatorModels.length})`}
@@ -143,9 +158,14 @@ export default function CreatorProfile() {
         ) : (
           <EmptyState title="No models published yet" message="Follow the creator to get notified when they upload." />
         )}
-      </section>
+      </motion.section>
 
-      <section className="creator-cta compact">
+      <motion.section 
+        className="creator-cta compact"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
         <div>
           <div className="eyebrow">Creator support</div>
           <h2>Need custom variations or source files?</h2>
@@ -154,7 +174,7 @@ export default function CreatorProfile() {
         <Link className="btn-secondary" to="/support">
           Contact Support
         </Link>
-      </section>
-    </div>
+      </motion.section>
+    </PageTransition>
   );
 }

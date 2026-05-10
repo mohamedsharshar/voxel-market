@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
 import GlobalLoader from './components/GlobalLoader';
@@ -62,8 +63,8 @@ function AppRoutes() {
 
   return (
     <Suspense fallback={<RouteFallback />}>
-      <div className="route-shell" key={location.pathname}>
-        <Routes location={location}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/categories" element={<Categories />} />
@@ -92,7 +93,7 @@ function AppRoutes() {
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Home />} />
         </Routes>
-      </div>
+      </AnimatePresence>
     </Suspense>
   );
 }
