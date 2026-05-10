@@ -234,7 +234,7 @@ export default function AdminPanel() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* CREATORS TAB */}
@@ -286,9 +286,9 @@ export default function AdminPanel() {
                 </tbody>
               </table>
             </div>
-          </div>
-        )}
-
+          </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Model Modal */}

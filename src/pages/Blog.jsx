@@ -41,6 +41,7 @@ export default function Blog() {
               <strong>{article.title}</strong>
               <p>{article.excerpt}</p>
             </div>
+          </Link>
           </motion.div>
         ))}
       </motion.div>

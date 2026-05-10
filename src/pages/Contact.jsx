@@ -83,7 +83,6 @@ export default function Contact() {
           <button className="btn-primary" type="submit">
             <Send size={17} /> Send Message
           </button>
-          </button>
         </motion.form>
       </section>
     </PageTransition>

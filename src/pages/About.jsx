@@ -20,7 +20,6 @@ export default function About() {
           Voxel Market brings real-time previewing, technical filters, creator trust, and purchase
           workflows into one focused platform for developers, artists, and production teams.
         </p>
-        </p>
       </motion.section>
 
       <motion.section 
@@ -43,7 +42,6 @@ export default function About() {
           <Zap size={22} />
           <strong>Keep workflows fast</strong>
           <span>Search, quick view, wishlist, history, and recommendations reduce unnecessary navigation steps.</span>
-        </div>
         </div>
       </motion.section>
 
@@ -88,7 +86,6 @@ export default function About() {
           <Link className="btn-secondary" to="/dashboard">
             Creator Dashboard
           </Link>
-        </div>
         </div>
       </motion.section>
     </PageTransition>
