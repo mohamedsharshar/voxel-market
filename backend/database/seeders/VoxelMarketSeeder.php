@@ -48,7 +48,7 @@ class VoxelMarketSeeder extends Seeder
 
         // Reliable Unsplash images that match products
         $img = [
-            'duck'      => 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=600&q=80',
+            'duck'      => 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600&q=80',
             'helmet'    => 'https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=600&q=80',
             'lantern'   => 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=600&q=80',
             'bottle'    => 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80',

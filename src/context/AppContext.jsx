@@ -51,8 +51,8 @@ export function AppProvider({ children }) {
   const [toast, setToast] = React.useState(null);
   const [user, setUser] = React.useState(() => readJson('voxel_user', null));
   const [globalLoading, setGlobalLoading] = React.useState(false);
-  const [models, setModels] = React.useState(MODELS);
-  const [creators, setCreators] = React.useState(CREATORS);
+  const [models, setModels] = React.useState([]);
+  const [creators, setCreators] = React.useState([]);
 
   const API_BASE = React.useMemo(() => {
     const raw = (import.meta.env.VITE_API_BASE_URL || '').trim();

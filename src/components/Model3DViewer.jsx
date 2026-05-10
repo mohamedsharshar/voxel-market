@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 import {
   Environment,
   OrbitControls,
@@ -36,11 +37,31 @@ function SceneBackground({ color }) {
   return null;
 }
 
+// Auto-fit: compute a normalised scale so every model fills the same apparent size.
+function computeAutoScale(scene, targetSize = 2.8) {
+  const box = new THREE.Box3().setFromObject(scene);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  const maxDim = Math.max(size.x, size.y, size.z);
+  return maxDim > 0 ? targetSize / maxDim : 1;
+}
+
 function Model({ url, wireframe, metalness, roughness, animate }) {
   const groupRef = useRef();
   const { scene, animations } = useGLTF(url);
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
   const { actions, names } = useAnimations(animations, groupRef);
+
+  // Compute dynamic scale once per model URL.
+  const autoScale = useMemo(() => computeAutoScale(clonedScene), [clonedScene]);
+
+  // Centre the model on its bounding-box midpoint so it sits in the middle of the viewer.
+  const offset = useMemo(() => {
+    const box = new THREE.Box3().setFromObject(clonedScene);
+    const centre = new THREE.Vector3();
+    box.getCenter(centre);
+    return centre.negate();
+  }, [clonedScene]);
 
   useEffect(() => {
     clonedScene.traverse((child) => {
@@ -74,8 +95,8 @@ function Model({ url, wireframe, metalness, roughness, animate }) {
   }, [actions, animate, names]);
 
   return (
-    <group ref={groupRef}>
-      <primitive object={clonedScene} scale={1.55} />
+    <group ref={groupRef} scale={autoScale} position={[offset.x * autoScale, offset.y * autoScale, offset.z * autoScale]}>
+      <primitive object={clonedScene} />
     </group>
   );
 }
@@ -128,7 +149,7 @@ export default function Model3DViewer({ modelUrl, model }) {
         <Canvas
           shadows
           dpr={[1, 1.75]}
-          camera={{ position: [0, 0.9, 5], fov: 48 }}
+          camera={{ position: [0, 0.8, 3.8], fov: 42 }}
           gl={{ antialias: true, powerPreference: 'high-performance' }}
         >
           <SceneBackground color={background.color} />
